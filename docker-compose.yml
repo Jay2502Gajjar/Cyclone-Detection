@@ -1,0 +1,7 @@
+version: '3.8'
+
+# Docker services will be added later for frontend, backend, ai-service, and database.
+services:
+  # placeholder:
+  #   image: alpine
+  #   command: echo "Placeholder"

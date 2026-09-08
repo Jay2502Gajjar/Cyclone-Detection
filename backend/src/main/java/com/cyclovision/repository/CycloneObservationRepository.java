@@ -11,5 +11,7 @@ import java.util.UUID;
 @Repository
 public interface CycloneObservationRepository extends JpaRepository<CycloneObservation, UUID> {
     List<CycloneObservation> findByCycloneIdOrderByObservedAtDesc(UUID cycloneId);
+    List<CycloneObservation> findByCycloneIdOrderByObservedAtAsc(UUID cycloneId);
+    Optional<CycloneObservation> findByCycloneIdAndSourceRecordId(UUID cycloneId, String sourceRecordId);
     Optional<CycloneObservation> findFirstByCycloneIdOrderByObservedAtDesc(UUID cycloneId);
 }

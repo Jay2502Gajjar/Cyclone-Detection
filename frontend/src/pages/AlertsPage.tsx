@@ -62,21 +62,24 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ cyclone }) => {
           {alerts.map((alert) => (
             <div
               key={alert.id}
-              className="glass-panel p-5 rounded-2xl border border-red-500/30 space-y-3 relative overflow-hidden"
+              className="solis-card p-5 rounded-2xl border border-[#FF6B57]/50 bg-[#FF6B57]/10 space-y-3 relative overflow-hidden shadow-lg shadow-[#FF6B57]/10"
             >
               <div className="flex justify-between items-center">
-                <span className="font-bold text-white text-sm">{alert.cycloneName}</span>
-                <span className="text-xs px-2.5 py-1 rounded-md bg-red-500/20 text-red-400 border border-red-500/40 font-mono font-extrabold uppercase">
+                <span className="font-bold text-[#F5F8FA] text-sm flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#FF6B57] animate-ping"></span>
+                  {alert.cycloneName}
+                </span>
+                <span className="text-xs px-2.5 py-1 rounded-md bg-[#FF6B57]/20 text-[#FF6B57] border border-[#FF6B57]/40 font-mono font-extrabold uppercase">
                   {alert.severity}
                 </span>
               </div>
 
-              <p className="text-xs text-gray-300 leading-relaxed font-sans">{alert.message}</p>
+              <p className="text-xs text-[#C7D4DD] leading-relaxed font-sans">{alert.message}</p>
 
               <div className="pt-2 flex flex-wrap gap-1.5 items-center">
-                <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                <MapPin className="w-3.5 h-3.5 text-[#7C93A0]" />
                 {alert.affectedRegions.map((region, idx) => (
-                  <span key={idx} className="text-[11px] px-2 py-0.5 rounded bg-gray-800 text-red-300 border border-gray-700">
+                  <span key={idx} className="text-[11px] px-2 py-0.5 rounded bg-[#132C42] text-[#FF6B57] border border-[#3A4E5A]">
                     {region}
                   </span>
                 ))}

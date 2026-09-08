@@ -88,23 +88,23 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 futuristic-grid-bg p-2 rounded-3xl">
       {/* Active Storm Selector Bar */}
-      <div className="solis-card p-4 flex flex-wrap items-center justify-between gap-4 border border-white/10">
+      <div className="solis-card p-4 flex flex-wrap items-center justify-between gap-4 border border-[#3A4E5A] bg-[#1E3E58]/90">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400 border border-emerald-500/20">
+          <div className="p-3 bg-[#3FC7EA]/10 rounded-2xl text-[#3FC7EA] border border-[#3FC7EA]/30">
             <Wind className="w-6 h-6 animate-spin-slow" />
           </div>
           <div>
-            <span className="text-[11px] text-gray-400 font-mono block">Active Storm Scenario</span>
+            <span className="text-[11px] text-[#7C93A0] font-mono block">Active Storm Scenario</span>
             <select
               value={selectedCyclone?.id || ''}
               onChange={(e) => {
                 const found = cyclones.find((c) => c.id === e.target.value);
                 if (found) setSelectedCyclone(found);
               }}
-              className="bg-transparent font-extrabold text-xl text-white focus:outline-none cursor-pointer border-none"
+              className="bg-transparent font-extrabold text-xl text-[#F5F8FA] focus:outline-none cursor-pointer border-none"
             >
               {cyclones.map((c) => (
-                <option key={c.id} value={c.id} className="bg-gray-900 text-white">
+                <option key={c.id} value={c.id} className="bg-[#0B1B2B] text-[#F5F8FA]">
                   {c.name} — {c.basin} ({c.latestObservation?.windSpeedKmh || 165} km/h)
                 </option>
               ))}
@@ -114,12 +114,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <span className="text-[11px] text-gray-400 font-mono block">Basin Origin</span>
-            <span className="text-sm font-bold text-indigo-300 font-mono">{selectedCyclone?.basin}</span>
+            <span className="text-[11px] text-[#7C93A0] font-mono block">Basin Origin</span>
+            <span className="text-sm font-bold text-[#3FC7EA] font-mono">{selectedCyclone?.basin}</span>
           </div>
-          <div className="text-right border-l border-white/10 pl-4">
-            <span className="text-[11px] text-gray-400 font-mono block">Central Pressure</span>
-            <span className="text-sm font-bold text-purple-300 font-mono">{latestObs?.pressureHpa || 954} hPa</span>
+          <div className="text-right border-l border-[#3A4E5A] pl-4">
+            <span className="text-[11px] text-[#7C93A0] font-mono block">Central Pressure</span>
+            <span className="text-sm font-bold text-[#E8C24A] font-mono">{latestObs?.pressureHpa || 954} hPa</span>
           </div>
         </div>
       </div>

@@ -111,20 +111,20 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="sticky top-0 z-50 pt-4 pb-2 px-4 md:px-8 max-w-7xl mx-auto w-full">
       <div 
         ref={navContainerRef}
-        className="solis-card px-6 py-3 flex items-center justify-between border border-white/10 rounded-[24px] bg-[#12141A]/90 backdrop-blur-2xl relative"
+        className="solis-card px-6 py-3 flex items-center justify-between border border-[#3A4E5A] rounded-[24px] bg-[#0B1B2B]/90 backdrop-blur-2xl relative shadow-xl"
       >
         {/* Brand Name */}
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setActiveTab('dashboard')}>
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-            <Globe className="w-4 h-4 text-white animate-spin-slow" />
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#3FC7EA] to-[#2C5872] flex items-center justify-center shadow-lg shadow-[#3FC7EA]/20 group-hover:scale-105 transition-transform">
+            <Globe className="w-4 h-4 text-[#0B1B2B] animate-spin-slow font-bold" />
           </div>
-          <span className="font-extrabold text-2xl tracking-tight text-white font-sans">
+          <span className="font-extrabold text-2xl tracking-tight text-[#F5F8FA] font-sans">
             CycloVision
           </span>
         </div>
 
         {/* Center Pill Navigation Tabs */}
-        <nav className="hidden lg:flex items-center gap-1.5 bg-[#1B1E29]/80 p-1.5 rounded-full border border-white/5">
+        <nav className="hidden lg:flex items-center gap-1.5 bg-[#132C42]/90 p-1.5 rounded-full border border-[#3A4E5A]">
           {navItems.map((item) => {
             const isActive = activeTab === item.id;
             return (
@@ -146,10 +146,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Search Trigger Button */}
           <button 
             onClick={() => setIsSearchOpen(true)}
-            className="w-10 h-10 rounded-full bg-[#1B1E29] text-gray-300 hover:text-white hover:bg-gray-800 flex items-center justify-center transition-all border border-white/10 shadow-sm relative group"
+            className="w-10 h-10 rounded-full bg-[#1E3E58] text-[#C7D4DD] hover:text-[#F5F8FA] hover:bg-[#2C5872] flex items-center justify-center transition-all border border-[#3A4E5A] shadow-sm relative group"
             title="Search storms or models (Ctrl+K)"
           >
-            <Search className="w-4 h-4 text-gray-300 group-hover:text-white transition-colors" />
+            <Search className="w-4 h-4 text-[#C7D4DD] group-hover:text-[#F5F8FA] transition-colors" />
           </button>
           
           {/* Notifications Bell Trigger Button */}
@@ -158,12 +158,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               setIsNotificationsOpen(!isNotificationsOpen);
               setIsProfileOpen(false);
             }}
-            className="w-10 h-10 rounded-full bg-[#1B1E29] text-gray-300 hover:text-white hover:bg-gray-800 flex items-center justify-center transition-all border border-white/10 shadow-sm relative group"
+            className="w-10 h-10 rounded-full bg-[#1E3E58] text-[#C7D4DD] hover:text-[#F5F8FA] hover:bg-[#2C5872] flex items-center justify-center transition-all border border-[#3A4E5A] shadow-sm relative group"
             title="Real-time Advisories & Notifications"
           >
-            <Bell className="w-4 h-4 text-gray-300 group-hover:text-white transition-colors" />
+            <Bell className="w-4 h-4 text-[#C7D4DD] group-hover:text-[#F5F8FA] transition-colors" />
             {hasUnread && (
-              <span className="absolute top-[6px] right-[6px] w-2.5 h-2.5 bg-[#22C55E] rounded-full border-2 border-[#12141A] shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse"></span>
+              <span className="absolute top-[6px] right-[6px] w-2.5 h-2.5 bg-[#3FC7EA] rounded-full border-2 border-[#0B1B2B] shadow-[0_0_8px_rgba(63,199,234,0.6)] animate-pulse"></span>
             )}
           </button>
 
@@ -173,7 +173,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               setIsProfileOpen(!isProfileOpen);
               setIsNotificationsOpen(false);
             }}
-            className="w-10 h-10 rounded-full overflow-hidden border border-white/10 shadow-sm hover:border-emerald-500/50 transition-all flex items-center justify-center bg-[#1B1E29] relative group focus:outline-none"
+            className="w-10 h-10 rounded-full overflow-hidden border border-[#3A4E5A] shadow-sm hover:border-[#3FC7EA] transition-all flex items-center justify-center bg-[#1E3E58] relative group focus:outline-none"
             title="Operator Profile & System Settings"
           >
             <img

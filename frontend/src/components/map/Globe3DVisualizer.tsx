@@ -198,22 +198,22 @@ export const Globe3DVisualizer: React.FC<Globe3DProps> = ({
 
         // 3D Sphere Ocean Body
         const oceanGrad = ctx.createRadialGradient(cx - sphereRadius * 0.35, cy - sphereRadius * 0.35, 10, cx, cy, sphereRadius * zoomLevel);
-        oceanGrad.addColorStop(0, '#0F172A');
-        oceanGrad.addColorStop(0.65, '#080C16');
-        oceanGrad.addColorStop(1, '#020408');
+        oceanGrad.addColorStop(0, '#1E3E58');
+        oceanGrad.addColorStop(0.65, '#132C42');
+        oceanGrad.addColorStop(1, '#0B1B2B');
 
         ctx.fillStyle = oceanGrad;
         ctx.beginPath();
         ctx.arc(cx, cy, sphereRadius * zoomLevel, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.strokeStyle = 'rgba(124, 147, 160, 0.25)';
         ctx.lineWidth = 1.6;
         ctx.stroke();
       }
 
       // Draw 3D Lat/Lon Graticule Grid Lines (Equator, Tropics, Prime Meridian)
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.strokeStyle = 'rgba(124, 147, 160, 0.12)';
       ctx.lineWidth = 1;
       const graticuleLats = [-66.5, -23.5, 0, 23.5, 66.5];
       graticuleLats.forEach((lat) => {
@@ -230,7 +230,7 @@ export const Globe3DVisualizer: React.FC<Globe3DProps> = ({
       });
 
       // Draw Continent Coastlines
-      ctx.strokeStyle = 'rgba(99, 102, 241, 0.55)';
+      ctx.strokeStyle = '#5A8AA3';
       ctx.lineWidth = 1.6;
       landmasses.forEach((poly) => {
         ctx.beginPath();

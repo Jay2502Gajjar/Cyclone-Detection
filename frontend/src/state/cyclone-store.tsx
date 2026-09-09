@@ -146,12 +146,11 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
       try {
         const active = await fetchActiveCyclones();
         if (active && active.length > 0) return active;
-        // If no active cyclones returned, check all cyclones
         const all = await fetchAllCyclones();
-        return all ?? [];
-      } catch (err) {
-        // Re-throw to allow error handling in UI
-        throw err;
+        return all && all.length > 0 ? all : null;
+      } catch {
+        // Graceful fallback to rich local/demo dataset when backend is initializing or offline
+        return null;
       }
     },
     staleTime: 60_000,

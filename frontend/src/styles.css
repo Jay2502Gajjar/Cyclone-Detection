@@ -44,33 +44,33 @@
 
 :root {
   --radius: 0.875rem;
-  --background: oklch(0.962 0.014 80);
-  --foreground: oklch(0.24 0.014 60);
-  --ink: oklch(0.18 0.012 60);
-  --card: oklch(0.985 0.009 82);
-  --card-foreground: oklch(0.24 0.014 60);
-  --popover: oklch(0.985 0.009 82);
-  --popover-foreground: oklch(0.24 0.014 60);
-  --primary: oklch(0.31 0.045 48);
-  --primary-foreground: oklch(0.975 0.012 82);
-  --secondary: oklch(0.93 0.016 76);
-  --secondary-foreground: oklch(0.28 0.02 55);
-  --muted: oklch(0.935 0.014 78);
-  --muted-foreground: oklch(0.53 0.022 62);
-  --accent: oklch(0.7 0.145 55);
-  --accent-foreground: oklch(0.2 0.02 55);
-  --amber: oklch(0.72 0.155 58);
-  --clay: oklch(0.52 0.09 45);
-  --destructive: oklch(0.55 0.18 27);
-  --destructive-foreground: oklch(0.98 0.01 80);
-  --border: oklch(0.87 0.018 72);
-  --input: oklch(0.87 0.018 72);
-  --ring: oklch(0.7 0.145 55);
-  --chart-1: oklch(0.7 0.145 55);
-  --chart-2: oklch(0.42 0.06 45);
-  --chart-3: oklch(0.6 0.07 90);
-  --chart-4: oklch(0.55 0.18 27);
-  --chart-5: oklch(0.62 0.03 60);
+  --background: #111317;
+  --foreground: #F8FAFC;
+  --ink: #F8FAFC;
+  --card: #1C1F26;
+  --card-foreground: #F8FAFC;
+  --popover: #1C1F26;
+  --popover-foreground: #F8FAFC;
+  --primary: #3B82F6;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1E293B;
+  --secondary-foreground: #F8FAFC;
+  --muted: #161922;
+  --muted-foreground: #94A3B8;
+  --accent: #3B82F6;
+  --accent-foreground: #FFFFFF;
+  --amber: #3B82F6;
+  --clay: #38BDF8;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #262B36;
+  --input: #262B36;
+  --ring: #3B82F6;
+  --chart-1: #3B82F6;
+  --chart-2: #10B981;
+  --chart-3: #38BDF8;
+  --chart-4: #60A5FA;
+  --chart-5: #94A3B8;
 }
 
 @layer base {
@@ -95,9 +95,9 @@
 }
 
 @utility panel {
-  background-color: color-mix(in oklab, var(--card) 88%, transparent);
+  background-color: color-mix(in oklab, var(--card) 94%, transparent);
   backdrop-filter: blur(14px);
-  border: 1px solid color-mix(in oklab, var(--border) 90%, transparent);
+  border: 1px solid var(--border);
   border-radius: var(--radius-xl);
 }
 
@@ -121,6 +121,7 @@
     transform: scale(0.6);
     opacity: 0.8;
   }
+
   100% {
     transform: scale(2.4);
     opacity: 0;
@@ -142,12 +143,14 @@
 }
 
 .leaflet-container {
-  background: oklch(0.2 0.01 60);
+  background: #111317;
   font-family: var(--font-sans);
 }
+
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
   background: var(--card);
   color: var(--foreground);
+  border: 1px solid var(--border);
   border-radius: 12px;
 }

@@ -16,6 +16,7 @@ import { fetchPrediction, triggerPrediction } from "@/api/predictionApi";
 import { fetchSituationReport } from "@/api/reportApi";
 import { fetchRisk } from "@/api/riskApi";
 import { runSatelliteAnalysis } from "@/api/satelliteApi";
+import { DEMO_CYCLONES } from "@/data/demo";
 import type { Cyclone, ForecastPoint, SatelliteAnalysis } from "@/types/cyclone";
 
 export type ViewMode = "3D" | "2D";
@@ -209,23 +210,27 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
     staleTime: 30_000,
   });
 
+  const isLive = Boolean(rawCyclones && rawCyclones.length > 0 && !listError);
+
   // Map initial summary cyclones to basic Cyclone objects
   const cyclones: Cyclone[] = useMemo(() => {
-    if (!rawCyclones || rawCyclones.length === 0) return [];
-    return rawCyclones.map((summary) => {
-      if (selectedDetail && selectedDetail.id === summary.id) {
-        return selectedDetail;
-      }
-      return buildFrontendCyclone(summary);
-    });
+    if (rawCyclones && rawCyclones.length > 0) {
+      return rawCyclones.map((summary) => {
+        if (selectedDetail && selectedDetail.id === summary.id) {
+          return selectedDetail;
+        }
+        return buildFrontendCyclone(summary);
+      });
+    }
+    return DEMO_CYCLONES;
   }, [rawCyclones, selectedDetail]);
 
   const cyclone: Cyclone = useMemo(() => {
     if (selectedDetail) return selectedDetail;
-    const first = cyclones[0];
-    if (first) return first;
-    return EMPTY_FALLBACK_CYCLONE;
-  }, [selectedDetail, cyclones]);
+    const found = cyclones.find((c) => c.id === selectedId);
+    if (found) return found;
+    return cyclones[0] ?? DEMO_CYCLONES[0];
+  }, [selectedDetail, cyclones, selectedId]);
 
   const [view, setView] = useState<ViewMode>("3D");
   const [layers, setLayers] = useState(defaultLayers);
@@ -366,7 +371,7 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
     selectCyclone,
     loading: isListLoading || isDetailLoading,
     error: errorMessage,
-    live: true,
+    live: isLive,
     view,
     setView,
     layers,

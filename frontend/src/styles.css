@@ -138,6 +138,26 @@
   animation: sweep 4s linear infinite;
 }
 
+@keyframes page-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-page-enter {
+  animation: page-enter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 @utility pulse-ring {
   animation: ping-ring 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
 }

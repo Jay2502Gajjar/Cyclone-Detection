@@ -5,7 +5,7 @@ import { useCyclone } from "@/state/cyclone-store";
 import { Pill } from "@/components/ui/primitives";
 
 const NAV = [
-  { to: "/", label: "Overview" },
+  { to: "/dashboard", label: "Console" },
   { to: "/map", label: "Live Map" },
   { to: "/ai", label: "AI Analysis" },
   { to: "/predictions", label: "Predictions" },

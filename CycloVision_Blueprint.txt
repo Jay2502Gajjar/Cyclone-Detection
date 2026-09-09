@@ -1,0 +1,226 @@
+CycloVision - AI Service and Application Blueprint
+
+This document explains the recommended AI service, datasets, core
+application features, frontend design, and interaction between React,
+Spring Boot, FastAPI, and Neon PostgreSQL.
+
+1.  Recommended Project Direction
+
+CycloVision should be built as an AI-powered Tropical Cyclone
+Intelligence Platform. The application should combine satellite imagery,
+historical cyclone tracks, weather data, machine learning predictions,
+historical similarity analysis, and risk visualization.
+
+The main goal is not only to show a cyclone on a map. The system should
+help users understand what the cyclone looks like, how it is evolving,
+where it may move, and how risky it may become.
+
+2.  Recommended AI Service
+
+Build one Python FastAPI AI service containing multiple AI and ML
+modules. Do not create a separate microservice for every model during
+the hackathon.
+
+Main AI Modules
+
+Module | Purpose | Recommended Approach Satellite Analysis | Analyze
+cyclone satellite images | EfficientNet-B0 or ResNet transfer learning
+Intensity Prediction | Predict strengthen, weaken, or stable | XGBoost
+using numerical weather features Trajectory Prediction | Predict future
+cyclone positions | GRU if ready, otherwise a reliable baseline
+Historical Similarity | Find similar historical cyclones | Cosine
+similarity or KNN Explainability | Explain model predictions | SHAP and
+confidence scores Image Explainability | Show important image regions |
+Grad-CAM Risk Engine | Generate understandable risk levels | Transparent
+weighted scoring rules
+
+Why One AI Service
+
+One FastAPI service is easier to develop, test, deploy, and demonstrate.
+Internally, the service can still have separate folders for models,
+preprocessing, services, and API routes.
+
+3.  Recommended AI Service Architecture
+
+The communication flow should be:
+
+React Frontend down Spring Boot Backend down FastAPI AI Service down
+Satellite Analysis, Intensity Model, Trajectory Model, Similarity
+Engine, Risk Engine down Prediction Result down Spring Boot down Neon
+PostgreSQL and PostGIS down React Dashboard
+
+4.  Satellite Dataset for AI Detection and Classification
+
+Primary Recommendation: NOAA HURSAT-B1
+
+HURSAT-B1 should be used as the main satellite dataset for the AI
+prototype. It contains storm-centered historical satellite observations
+for tropical cyclones.
+
+The major advantage is that the satellite images are already focused
+around tropical cyclones. This makes the dataset much more practical for
+a hackathon than trying to collect and label raw global satellite
+images.
+
+Recommended Use
+
+Step | Use 1 | Select a manageable subset of historical cyclones 2 |
+Download associated satellite observations 3 | Preprocess and normalize
+images 4 | Match images with cyclone metadata from IBTrACS 5 | Train a
+transfer learning classification model 6 | Return classification and
+confidence 7 | Optionally generate a Grad-CAM visualization
+
+Recommended MVP Task
+
+For the MVP, focus on satellite image classification and cyclone
+structural assessment. Do not attempt full global pixel-level cyclone
+detection.
+
+The model can classify cyclone stage or intensity category from a
+storm-centered satellite image. It can also provide a confidence score
+and visual explanation.
+
+5.  Historical Cyclone Dataset
+
+Primary Recommendation: NOAA IBTrACS
+
+IBTrACS should be the main historical cyclone dataset for CycloVision.
+Use it as the foundation for cyclone tracks, locations, wind speed,
+pressure, timestamps, historical analysis, and demo scenarios.
+
+Application Feature | How IBTrACS Helps Dashboard | Provides cyclone
+records and historical observations Trajectory Prediction | Provides
+sequences of locations and timestamps Intensity Analysis | Provides wind
+and pressure history Historical Similarity | Provides comparable cyclone
+behavior Demo Mode | Provides reliable preloaded historical cyclone
+scenarios
+
+6.  Recommended Dataset Combination
+
+Dataset | Purpose NOAA IBTrACS | Historical cyclone tracks, locations,
+wind, pressure, and cyclone metadata NOAA HURSAT-B1 | Satellite imagery
+for computer vision and image analysis Optional Weather Data | Sea
+surface temperature and atmospheric conditions
+
+Recommended core combination: IBTrACS for numerical and track
+information, and HURSAT-B1 for satellite imagery.
+
+7.  Core Features of the Application
+
+Priority | Feature | Purpose Must Have | Cyclone Dashboard | Show active
+or selected cyclone information Must Have | Interactive Map | Show
+current, historical, and predicted tracks Must Have | Satellite AI
+Analysis | Analyze satellite imagery using AI Must Have | Trajectory
+Prediction | Predict future movement Must Have | Intensity Prediction |
+Predict strengthen, weaken, or stable Must Have | Historical Similarity
+| Find similar historical cyclones Must Have | Explainable Insights |
+Show confidence and important factors Should Have | Landfall Risk Zones
+| Show possible high-risk areas Wow Feature | Grad-CAM | Show where the
+AI focused on the satellite image Wow Feature | AI Situation Report |
+Generate a readable intelligence summary
+
+8.  Frontend Design
+
+The frontend should look like a Cyclone Intelligence Command Center. It
+should not look like a generic admin dashboard.
+
+Main Layout
+
+Area | Content Top Navigation | CycloVision logo, Dashboard, Live Map,
+AI Analysis, Predictions, Historical Data, Alerts Main Center | Large
+interactive cyclone map Left Panel | Active cyclones and quick cyclone
+information Right Panel | Selected cyclone intelligence and AI insights
+Bottom Section | Wind trend, pressure trend, forecast, and confidence
+charts
+
+Map Features
+
+Map Feature | Purpose Current Location | Show latest cyclone position
+Historical Track | Show past movement Predicted Track | Show future
+estimated path Confidence Corridor | Show prediction uncertainty Risk
+Zones | Show areas with elevated risk Landfall Area | Show possible
+coastal impact region
+
+9.  Backend Interaction
+
+Normal Dashboard Request
+
+React requests cyclone information. Spring Boot receives the request.
+Spring Boot retrieves information from Neon PostgreSQL and PostGIS.
+Spring Boot returns structured data to React.
+
+AI Analysis Request
+
+Step 1: User selects a cyclone. Step 2: React sends an analysis request
+to Spring Boot. Step 3: Spring Boot gathers cyclone observations and
+satellite data references. Step 4: Spring Boot calls the FastAPI AI
+service. Step 5: FastAPI runs the required ML modules. Step 6: FastAPI
+returns prediction results. Step 7: Spring Boot stores the results in
+PostgreSQL. Step 8: React displays the results.
+
+10. Recommended AI Service Endpoints
+
+Endpoint | Purpose POST /analyze/satellite | Analyze satellite image
+POST /predict/intensity | Predict intensity trend POST
+/predict/trajectory | Predict future locations POST /similarity | Find
+similar historical cyclones POST /analyze/full | Run complete analysis
+pipeline GET /health | Check AI service availability
+
+11. Recommended AI Model Strategy
+
+Capability | Recommended MVP Model | Reason Satellite Classification |
+EfficientNet-B0 | Pretrained, efficient, strong image baseline Intensity
+Prediction | XGBoost | Strong for structured numerical data Trajectory
+Prediction | GRU or baseline | Suitable for time sequences Historical
+Similarity | Cosine Similarity or KNN | Simple and easy to explain Risk
+Scoring | Weighted Rules | Transparent and reliable Tabular
+Explainability | SHAP | Shows important prediction factors Image
+Explainability | Grad-CAM | Provides strong visual demonstration
+
+12. What Not to Build Initially
+
+Avoid starting with the following because they add major complexity
+without improving the MVP enough:
+
+Avoid Initially | Reason Real-time global satellite streaming | Complex
+data ingestion and processing Transformer trajectory models | Requires
+more data and experimentation Pixel-level segmentation | Requires
+labelled segmentation datasets Many AI agent frameworks | Adds
+complexity without improving scientific prediction Kubernetes or complex
+cloud infrastructure | Not needed for a hackathon MVP Multiple separate
+AI microservices | Creates unnecessary integration work
+
+13. Final Recommended MVP
+
+Input: A selected historical or demo cyclone with satellite imagery and
+observation history.
+
+AI Analysis: Satellite image classification, intensity trend prediction,
+trajectory prediction, historical similarity search, and risk scoring.
+
+Output: An interactive command center showing the cyclone on a map,
+satellite analysis, predicted path, confidence, historical similar
+cyclones, and risk information.
+
+14. Final Technology Decision
+
+Component | Recommended Choice Frontend | React, Vite, TypeScript,
+Tailwind CSS, React Leaflet, Recharts Backend | Spring Boot Database |
+Neon PostgreSQL with PostGIS AI Service | Python and FastAPI Satellite
+Dataset | NOAA HURSAT-B1 Historical Dataset | NOAA IBTrACS Satellite
+Model | EfficientNet-B0 Intensity Model | XGBoost Trajectory Model | GRU
+if feasible Similarity Engine | Cosine Similarity or KNN Explainability
+| SHAP and Grad-CAM
+
+15. Final Recommendation
+
+The strongest hackathon implementation is a focused, end-to-end system
+rather than many incomplete AI models.
+
+Use real historical cyclone data, real satellite imagery, one working
+computer vision model, one structured-data prediction model, historical
+similarity analysis, and strong visualization.
+
+The final demo should clearly show: satellite image analysis, cyclone
+classification, predicted movement, intensity trend, historical
+similarity, and risk visualization.

@@ -1,0 +1,13 @@
+# Demo profile: run with `--spring.profiles.active=demo` as live-demo insurance.
+#
+# Every forecast is served from demo_scenario rows and stamped servedFrom="demo",
+# degraded=true, DEMO_DATA. The scrubber is unaffected — it reads precomputed frames and
+# never touches the AI service (invariant I5), so the primary interaction keeps working
+# even with the AI service switched off entirely.
+
+cyclovision:
+  demo-mode: true
+
+logging:
+  level:
+    com.cyclovision: DEBUG

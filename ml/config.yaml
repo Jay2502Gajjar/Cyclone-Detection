@@ -1,0 +1,66 @@
+# ml/ pipeline configuration.
+#
+# One file so a run is reproducible from a single artefact, and so the storm list and
+# thresholds are reviewable rather than buried in scripts.
+
+paths:
+  raw: ../data/raw
+  interim: ../data/interim
+  processed: ../data/processed
+  frames: ../data/frames
+  gradcam: ../data/gradcam
+  models: ../models
+  # Structural metrics have exactly one implementation, shared with the AI service, so
+  # the numbers a model trains on are the numbers it is served.
+  structure_module: ../ai-service/app/structure
+
+database:
+  url: ${DATABASE_URL:-postgresql://cyclovision:cyclovision@localhost:5433/cyclovision}
+
+ingest:
+  # Basin subsets are a few MB; the global IBTrACS file is over a hundred and we do not
+  # need it. North Indian first — the problem statement is Indian-Ocean framed.
+  ibtracs_basins: [NI]
+  # HURSAT-B1 IRWIN. Verify grid shape, resolution and attribute names on ONE file
+  # before writing the bulk parser: the whole pipeline shape depends on them.
+  hursat_expected_km_per_pixel: 8.0
+  # Join tolerance between a best-track observation and a satellite pass.
+  join_tolerance_minutes: 90
+
+split:
+  # Storm-wise, never frame-wise: frames within a storm are heavily autocorrelated and a
+  # random split would leak and inflate every metric.
+  strategy: storm-wise
+  seed: 20260908
+  train_fraction: 0.7
+  val_fraction: 0.15
+
+# Curated demo storms. All are forced into the test split; the database refuses any that
+# are not, because Rewind & Verify is meaningless on a storm the model trained on.
+demo_storms:
+  - name: FANI
+    year: 2019
+  - name: AMPHAN
+    year: 2020
+  - name: PHAILIN
+    year: 2013
+  - name: HUDHUD
+    year: 2014
+
+models:
+  ir_intensity:
+    architecture: efficientnet_b0
+    image_size: 224
+    # HURSAT IRWIN is single-channel; replicating to 3 channels keeps the ImageNet
+    # weights usable instead of discarding the pretrained first layer.
+    channels: 3
+  dvmax_ri:
+    horizon_hours: 24
+    ri_threshold_kt: 30        # the standard operational definition
+  track_cliper:
+    lead_hours: [12, 24, 48]
+    cone_percentiles: [67, 90] # empirical, from held-out error
+  analogue:
+    k: 20
+    window_hours: 24
+    exclude_same_season: true

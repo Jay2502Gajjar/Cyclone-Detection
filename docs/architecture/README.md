@@ -1,3 +1,3 @@
-# Architecture Documentation
+# Architecture documentation
 
-Detailed architectural diagrams and decisions will go here.
+Superseded by [`docs/architecture.md`](../architecture.md).

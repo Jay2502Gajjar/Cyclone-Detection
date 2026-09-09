@@ -1,0 +1,112 @@
+@import 'tailwindcss';
+
+/**
+ * CycloVision design tokens.
+ *
+ * Restrained glassmorphism over a deep navy ground, with the map as the only visual
+ * surface that fills the screen. Panels float on top of it; nothing is arranged in a
+ * card grid, because a card grid is what makes an instrument look like an admin
+ * dashboard.
+ *
+ * Two colour rules do most of the work:
+ *   --cv-accent is reserved for AI output and interactive affordances, nothing else.
+ *   --cv-truth  is reserved for observed values and ground truth, and is never accented.
+ * Keeping them apart means a viewer can tell a measurement from a prediction at a
+ * glance, without reading a label.
+ */
+
+@theme {
+  /* Ground — deep desaturated navy, never pure black. */
+  --color-cv-ground: #0b1020;
+  --color-cv-ground-soft: #111731;
+
+  /* Glass */
+  --color-cv-glass: rgb(255 255 255 / 0.055);
+  --color-cv-glass-strong: rgb(255 255 255 / 0.08);
+  --color-cv-glass-border: rgb(255 255 255 / 0.1);
+  --color-cv-glass-edge: rgb(255 255 255 / 0.16);
+
+  /* Type */
+  --color-cv-text: #dfe3ee;
+  --color-cv-muted: #8791ac;
+  --color-cv-faint: #5b6480;
+
+  /* The two reserved colours */
+  --color-cv-accent: #4dd4ce;
+  --color-cv-accent-dim: rgb(77 212 206 / 0.16);
+  --color-cv-truth: #e8eaf0;
+
+  /* Intensity ramp — sequential, for storm categories only. Never a rainbow. */
+  --color-cv-int-1: #6ba6d6;
+  --color-cv-int-2: #8fc0c8;
+  --color-cv-int-3: #e8c25a;
+  --color-cv-int-4: #e08e4a;
+  --color-cv-int-5: #e0654a;
+
+  /* Risk */
+  --color-cv-risk-low: #6ba6d6;
+  --color-cv-risk-moderate: #e8c25a;
+  --color-cv-risk-high: #e08e4a;
+  --color-cv-risk-critical: #e0654a;
+
+  --radius-cv: 14px;
+  --blur-cv: 20px;
+
+  --font-sans: Inter, ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-cv-ground);
+    color: var(--color-cv-text);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden; /* the map owns the viewport; panels scroll internally */
+  }
+
+  /* Every figure in the app is tabular so columns of numbers line up while scrubbing. */
+  .cv-num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  /* Respect a reduced-motion preference: the only real motion here is the scrub, which
+     is 1:1 with the drag and therefore already unanimated. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* One shadow. No glow. Top edge slightly brighter, as if lit from above. */
+  .cv-glass {
+    background: var(--color-cv-glass);
+    border: 1px solid var(--color-cv-glass-border);
+    border-top-color: var(--color-cv-glass-edge);
+    border-radius: var(--radius-cv);
+    backdrop-filter: blur(var(--blur-cv)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur-cv)) saturate(140%);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 0.28);
+  }
+}

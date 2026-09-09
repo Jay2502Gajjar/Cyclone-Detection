@@ -1,3 +1,4 @@
-# Development Documentation
+# Development documentation
 
-Developer guides and environment setup instructions will go here.
+Superseded by [`docs/development.md`](../development.md), which covers setup, ports,
+testing, and the two environment quirks on this machine.

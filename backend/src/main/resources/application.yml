@@ -1,6 +1,60 @@
 server:
-  port: 8080
+  # 8090, not 8080: 8080 is the most contested port on a dev machine (Jenkins,
+  # Tomcat, another Spring app). Overridable with SERVER_PORT.
+  port: ${SERVER_PORT:8090}
 
 spring:
   application:
-    name: backend
+    name: cyclovision-backend
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/cyclovision}
+    username: ${SPRING_DATASOURCE_USERNAME:cyclovision}
+    password: ${SPRING_DATASOURCE_PASSWORD:cyclovision}
+
+  jpa:
+    # Flyway owns the schema. Hibernate must never alter it, or the PostGIS generated
+    # column and the CHECK constraints that enforce our invariants would be at risk.
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+  # WebClient is used for the AI service call; we stay on Tomcat/MVC for the API itself.
+  main:
+    web-application-type: servlet
+
+cyclovision:
+  bundle-version: phase0
+  # DEMO_MODE forces every forecast to come from demo_scenario rows, tagged DEMO_DATA.
+  # Flip it on before a live demo as insurance; it can never masquerade as a real model.
+  demo-mode: ${DEMO_MODE:false}
+  models-dir: ${MODELS_DIR:../models}
+  media-dir: ${MEDIA_DIR:../data}
+  ai-service:
+    url: ${AI_SERVICE_URL:http://localhost:8000}
+    # Short, and no retry: a demo that hangs for 30s is worse than one that falls back in 8.
+    timeout-seconds: 8
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    com.cyclovision: INFO

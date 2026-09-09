@@ -1,0 +1,29 @@
+# Offline data engineering and training. Never installed into the deployed AI service.
+
+# Data engineering
+pandas>=2.2
+pyarrow>=15.0
+netCDF4>=1.6          # HURSAT-B1 is distributed as netCDF
+xarray>=2024.1
+cftime>=1.6
+shapely>=2.0          # distance-to-coast against Natural Earth coastlines
+httpx>=0.27
+tqdm>=4.66
+
+# Modelling (mirrors ai-service/requirements.txt so trained artefacts load identically)
+numpy>=1.26
+torch>=2.2
+torchvision>=0.17
+timm>=0.9
+xgboost>=2.0
+scikit-learn>=1.4
+pillow>=10.2
+matplotlib>=3.8       # evaluation plots only; never imported by the service
+
+# Database writes
+psycopg[binary]>=3.1
+SQLAlchemy>=2.0
+
+# Config
+pyyaml>=6.0
+loguru>=0.7

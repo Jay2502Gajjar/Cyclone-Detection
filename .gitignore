@@ -4,16 +4,38 @@ dist/
 
 # Java
 target/
+!.mvn/wrapper/maven-wrapper.jar
 
 # Python
 __pycache__/
 *.pyc
 .venv/
 venv/
+.pytest_cache/
 
 # Environment
 .env
 .env.local
+
+# CycloVision data (bulk, regenerable — see data/MANIFEST.md)
+data/raw/
+data/interim/
+data/processed/
+data/frames/
+data/gradcam/
+
+# CycloVision model weights (regenerable via ml/train/*)
+models/*.pt
+models/*.pth
+models/*.pkl
+models/*.npz
+models/*_v*.json
+# ...but these two ARE committed: they are credibility artifacts
+!models/metrics.json
+!models/model_card.md
+
+# ML scratch
+ml/notebooks/
 
 # IDE
 .idea/
@@ -21,3 +43,4 @@ venv/
 
 # OS
 .DS_Store
+Thumbs.db

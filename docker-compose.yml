@@ -1,7 +1,29 @@
-version: '3.8'
+# PostgreSQL with PostGIS. Nothing else.
+#
+# Standing up PostGIS natively is the most error-prone setup step on any of our machines,
+# so it is containerised. Node, Java and Python are fast to run natively and much easier
+# to hot-reload and debug without a container layer during a hackathon, so they are not.
 
-# Docker services will be added later for frontend, backend, ai-service, and database.
 services:
-  # placeholder:
-  #   image: alpine
-  #   command: echo "Placeholder"
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: cyclovision-postgres
+    environment:
+      POSTGRES_DB: cyclovision
+      POSTGRES_USER: cyclovision
+      POSTGRES_PASSWORD: cyclovision
+    ports:
+      # Published on 5433, not 5432: port 5432 is very often already taken by a
+      # system Postgres or another project's container. Colliding with it would mean
+      # stopping someone else's database to run ours.
+      - '5433:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U cyclovision -d cyclovision']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

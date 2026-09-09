@@ -1,0 +1,85 @@
+# =============================================================
+# CycloVision Data Integration — Data Source Configuration
+# =============================================================
+
+ibtracs:
+  description: "International Best Track Archive for Climate Stewardship (IBTrACS)"
+  provider: "NOAA NCEI"
+  base_url: "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv"
+  basins:
+    NI:
+      filename: "ibtracs.NI.list.v04r01.csv"
+      description: "North Indian Ocean (Bay of Bengal + Arabian Sea)"
+      approximate_size_mb: 5
+    ALL:
+      filename: "ibtracs.ALL.list.v04r01.csv"
+      description: "Global — all basins"
+      approximate_size_mb: 200
+  default_basin: "NI"
+  license: "Public domain (NOAA)"
+  citation: "Knapp, K.R., M.C. Kruk, D.H. Levinson, H.J. Diamond, and C.J. Neumann, 2010: The International Best Track Archive for Climate Stewardship (IBTrACS). Bull. Amer. Meteor. Soc., 91, 363–376."
+
+openweather:
+  description: "OpenWeatherMap Current Weather API"
+  provider: "OpenWeather Ltd"
+  base_url: "https://api.openweathermap.org/data/2.5"
+  endpoints:
+    current: "/weather"
+  units: "metric"
+  timeout_seconds: 3
+  license: "CC BY-SA 4.0 (free tier)"
+  notes: "Requires API key. Free tier: 60 calls/min, 1M calls/month."
+
+satellite:
+  description: "Satellite imagery sources for cyclone detection"
+  sources:
+    mosdac:
+      provider: "ISRO MOSDAC"
+      url: "https://mosdac.gov.in/"
+      description: "INSAT-3D/3DR satellite imagery (IR, VIS, WV)"
+      access: "Free registration required"
+      recommended_products:
+        - "INSAT-3D TIR1 (Thermal Infrared)"
+        - "INSAT-3D VIS (Visible)"
+        - "INSAT-3D WV (Water Vapor)"
+    noaa_goes:
+      provider: "NOAA CLASS"
+      url: "https://www.avl.class.noaa.gov/"
+      description: "GOES satellite imagery"
+      access: "Free, public"
+    demo:
+      provider: "CycloVision Demo"
+      description: "Synthetic demo images for offline development"
+      access: "Bundled with repository"
+
+intensity_categories:
+  # IMD (India Meteorological Department) classification
+  # Wind speeds in km/h
+  - name: "Depression"
+    abbreviation: "D"
+    wind_min_kmh: 31
+    wind_max_kmh: 49
+  - name: "Deep Depression"
+    abbreviation: "DD"
+    wind_min_kmh: 50
+    wind_max_kmh: 61
+  - name: "Cyclonic Storm"
+    abbreviation: "CS"
+    wind_min_kmh: 62
+    wind_max_kmh: 88
+  - name: "Severe Cyclonic Storm"
+    abbreviation: "SCS"
+    wind_min_kmh: 89
+    wind_max_kmh: 117
+  - name: "Very Severe Cyclonic Storm"
+    abbreviation: "VSCS"
+    wind_min_kmh: 118
+    wind_max_kmh: 166
+  - name: "Extremely Severe Cyclonic Storm"
+    abbreviation: "ESCS"
+    wind_min_kmh: 167
+    wind_max_kmh: 221
+  - name: "Super Cyclonic Storm"
+    abbreviation: "SuCS"
+    wind_min_kmh: 222
+    wind_max_kmh: 999

@@ -1,0 +1,80 @@
+{
+  "scenario_id": "scenario_02",
+  "title": "Intensifying Super Cyclone — AMPHAN (2020)",
+  "description": "Super Cyclonic Storm AMPHAN in the Bay of Bengal during rapid intensification. One of the strongest cyclones recorded in the North Indian Ocean. Data curated from public records, marked as demo.",
+  "cyclone": {
+    "id": "DEMO_AMPHAN_2020",
+    "name": "AMPHAN",
+    "basin": "NI",
+    "season_year": 2020,
+    "status": "demo"
+  },
+  "latest_observation": {
+    "observed_at": "2020-05-18T06:00:00+00:00",
+    "latitude": 14.8,
+    "longitude": 86.3,
+    "wind_speed_kmh": 240.0,
+    "pressure_hpa": 920.0,
+    "movement_direction_deg": 350.0,
+    "movement_speed_kmh": 14.0,
+    "intensity_category": "Super Cyclonic Storm"
+  },
+  "historical_observations": [
+    {
+      "observed_at": "2020-05-16T00:00:00+00:00",
+      "latitude": 11.5,
+      "longitude": 87.0,
+      "wind_speed_kmh": 85.0,
+      "pressure_hpa": 990.0,
+      "movement_direction_deg": 340.0,
+      "movement_speed_kmh": 10.0,
+      "intensity_category": "Cyclonic Storm"
+    },
+    {
+      "observed_at": "2020-05-17T00:00:00+00:00",
+      "latitude": 12.8,
+      "longitude": 86.8,
+      "wind_speed_kmh": 140.0,
+      "pressure_hpa": 965.0,
+      "movement_direction_deg": 345.0,
+      "movement_speed_kmh": 12.0,
+      "intensity_category": "Very Severe Cyclonic Storm"
+    },
+    {
+      "observed_at": "2020-05-17T12:00:00+00:00",
+      "latitude": 13.5,
+      "longitude": 86.5,
+      "wind_speed_kmh": 185.0,
+      "pressure_hpa": 940.0,
+      "movement_direction_deg": 348.0,
+      "movement_speed_kmh": 13.0,
+      "intensity_category": "Extremely Severe Cyclonic Storm"
+    }
+  ],
+  "weather": {
+    "latitude": 14.8,
+    "longitude": 86.3,
+    "wind_speed_kmh": 240.0,
+    "pressure_hpa": 920.0,
+    "temperature_c": 27.5,
+    "sea_surface_temp_c": null,
+    "observed_at": "2020-05-18T06:00:00+00:00",
+    "source": "demo"
+  },
+  "satellite": {
+    "image_id": "demo_ir_cyclone_01",
+    "cyclone_id": "DEMO_AMPHAN_2020",
+    "captured_at": "2020-05-18T06:00:00+00:00",
+    "image_type": "infrared",
+    "source": "demo",
+    "storage_path": "data/demo/images/cyclone/demo_ir_cyclone_01.png",
+    "is_cyclone": true
+  },
+  "source": {
+    "mode": "demo",
+    "provider": "demo",
+    "processing_script": "scripts/create_demo_scenarios.py",
+    "processing_version": "0.1.0"
+  },
+  "created_at": "2026-09-09T04:47:40.210154+00:00"
+}

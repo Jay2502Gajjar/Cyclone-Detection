@@ -1,0 +1,7 @@
+basin: NI
+data_mode: real
+downloaded_at: '2026-09-09T07:48:04.478082+00:00'
+filename: ibtracs.NI.list.v04r01.csv
+size_bytes: 27877743
+source: NOAA NCEI IBTrACS
+source_url: https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.NI.list.v04r01.csv

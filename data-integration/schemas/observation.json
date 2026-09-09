@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Observation",
+  "description": "A single point-in-time observation of a tropical cyclone",
+  "type": "object",
+  "properties": {
+    "observed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp of the observation in ISO 8601 format"
+    },
+    "latitude": {
+      "type": "number",
+      "minimum": -90.0,
+      "maximum": 90.0,
+      "description": "Latitude in decimal degrees (-90 to 90)"
+    },
+    "longitude": {
+      "type": "number",
+      "minimum": -180.0,
+      "maximum": 360.0,
+      "description": "Longitude in decimal degrees (-180 to 360)"
+    },
+    "wind_speed_kmh": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Maximum sustained wind speed in km/h"
+    },
+    "pressure_hpa": {
+      "type": ["number", "null"],
+      "minimum": 800,
+      "maximum": 1100,
+      "description": "Central barometric pressure in hPa"
+    },
+    "movement_direction_deg": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 360,
+      "description": "Direction of cyclone movement in compass degrees (0-360)"
+    },
+    "movement_speed_kmh": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Forward movement speed in km/h"
+    },
+    "intensity_category": {
+      "type": "string",
+      "enum": [
+        "Depression",
+        "Deep Depression",
+        "Cyclonic Storm",
+        "Severe Cyclonic Storm",
+        "Very Severe Cyclonic Storm",
+        "Extremely Severe Cyclonic Storm",
+        "Super Cyclonic Storm",
+        "Unknown"
+      ],
+      "default": "Unknown",
+      "description": "IMD tropical cyclone intensity classification"
+    }
+  },
+  "required": ["observed_at", "latitude", "longitude"]
+}

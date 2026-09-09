@@ -1,0 +1,80 @@
+{
+  "scenario_id": "scenario_01",
+  "title": "Developing Cyclone — MAHA (2019)",
+  "description": "Cyclone MAHA in the Arabian Sea during early formation stage. Demonstrates a developing system with moderate winds and gradual pressure drop. Data curated from public IBTrACS/IMD records, marked as demo.",
+  "cyclone": {
+    "id": "DEMO_MAHA_2019",
+    "name": "MAHA",
+    "basin": "NI",
+    "season_year": 2019,
+    "status": "demo"
+  },
+  "latest_observation": {
+    "observed_at": "2019-10-31T12:00:00+00:00",
+    "latitude": 10.5,
+    "longitude": 73.2,
+    "wind_speed_kmh": 75.0,
+    "pressure_hpa": 994.0,
+    "movement_direction_deg": 310.0,
+    "movement_speed_kmh": 12.0,
+    "intensity_category": "Cyclonic Storm"
+  },
+  "historical_observations": [
+    {
+      "observed_at": "2019-10-30T00:00:00+00:00",
+      "latitude": 9.8,
+      "longitude": 74.5,
+      "wind_speed_kmh": 45.0,
+      "pressure_hpa": 1002.0,
+      "movement_direction_deg": 300.0,
+      "movement_speed_kmh": 10.0,
+      "intensity_category": "Depression"
+    },
+    {
+      "observed_at": "2019-10-30T12:00:00+00:00",
+      "latitude": 10.0,
+      "longitude": 74.0,
+      "wind_speed_kmh": 55.0,
+      "pressure_hpa": 998.0,
+      "movement_direction_deg": 305.0,
+      "movement_speed_kmh": 11.0,
+      "intensity_category": "Deep Depression"
+    },
+    {
+      "observed_at": "2019-10-31T00:00:00+00:00",
+      "latitude": 10.3,
+      "longitude": 73.6,
+      "wind_speed_kmh": 65.0,
+      "pressure_hpa": 996.0,
+      "movement_direction_deg": 308.0,
+      "movement_speed_kmh": 11.5,
+      "intensity_category": "Cyclonic Storm"
+    }
+  ],
+  "weather": {
+    "latitude": 10.5,
+    "longitude": 73.2,
+    "wind_speed_kmh": 75.0,
+    "pressure_hpa": 994.0,
+    "temperature_c": 28.2,
+    "sea_surface_temp_c": null,
+    "observed_at": "2019-10-31T12:00:00+00:00",
+    "source": "demo"
+  },
+  "satellite": {
+    "image_id": "demo_ir_cyclone_01",
+    "cyclone_id": "DEMO_MAHA_2019",
+    "captured_at": "2019-10-31T06:00:00+00:00",
+    "image_type": "infrared",
+    "source": "demo",
+    "storage_path": "data/demo/images/cyclone/demo_ir_cyclone_01.png",
+    "is_cyclone": true
+  },
+  "source": {
+    "mode": "demo",
+    "provider": "demo",
+    "processing_script": "scripts/create_demo_scenarios.py",
+    "processing_version": "0.1.0"
+  },
+  "created_at": "2026-09-09T04:47:40.210154+00:00"
+}

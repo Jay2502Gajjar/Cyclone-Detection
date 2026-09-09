@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cyclone",
+  "description": "Metadata for a single tropical cyclone in the CycloVision platform",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique cyclone identifier (e.g. IBTrACS SID or DEMO ID)"
+    },
+    "name": {
+      "type": "string",
+      "default": "UNNAMED",
+      "description": "Assigned cyclone name"
+    },
+    "basin": {
+      "type": "string",
+      "default": "NI",
+      "description": "Ocean basin code (e.g. NI for North Indian Ocean)"
+    },
+    "season_year": {
+      "type": "integer",
+      "description": "Year of the cyclone season"
+    },
+    "status": {
+      "type": "string",
+      "default": "historical",
+      "enum": ["active", "historical", "demo"],
+      "description": "Lifecycle status of the cyclone"
+    }
+  },
+  "required": ["id", "season_year"]
+}

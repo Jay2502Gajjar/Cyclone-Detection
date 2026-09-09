@@ -1,0 +1,98 @@
+[
+  {
+    "location_name": "Arabian Sea (MAHA 2019 Stage)",
+    "latitude": 10.5,
+    "longitude": 73.2,
+    "wind_speed_kmh": 75.0,
+    "pressure_hpa": 994.0,
+    "temperature_c": 28.2,
+    "sea_surface_temp_c": null,
+    "observed_at": "2019-10-31T12:00:00Z",
+    "source": "demo",
+    "data_mode": "demo"
+  },
+  {
+    "location_name": "Bay of Bengal (AMPHAN 2020 Peak)",
+    "latitude": 14.8,
+    "longitude": 86.3,
+    "wind_speed_kmh": 240.0,
+    "pressure_hpa": 920.0,
+    "temperature_c": 27.5,
+    "sea_surface_temp_c": null,
+    "observed_at": "2020-05-18T06:00:00Z",
+    "source": "demo",
+    "data_mode": "demo"
+  },
+  {
+    "location_name": "Arabian Sea (BIPARJOY 2023 Mature)",
+    "latitude": 17.2,
+    "longitude": 64.8,
+    "wind_speed_kmh": 185.0,
+    "pressure_hpa": 944.0,
+    "temperature_c": 28.8,
+    "sea_surface_temp_c": null,
+    "observed_at": "2023-06-12T12:00:00Z",
+    "source": "demo",
+    "data_mode": "demo"
+  },
+  {
+    "location_name": "Myanmar Coastal (MOCHA 2023 Post-Landfall)",
+    "latitude": 21.5,
+    "longitude": 93.5,
+    "wind_speed_kmh": 45.0,
+    "pressure_hpa": 998.0,
+    "temperature_c": 29.0,
+    "sea_surface_temp_c": null,
+    "observed_at": "2023-05-14T18:00:00Z",
+    "source": "demo",
+    "data_mode": "demo"
+  },
+  {
+    "location_name": "West Bengal / Bangladesh Coast (REMAL 2024 Landfall)",
+    "latitude": 20.8,
+    "longitude": 88.5,
+    "wind_speed_kmh": 110.0,
+    "pressure_hpa": 978.0,
+    "temperature_c": 29.5,
+    "sea_surface_temp_c": null,
+    "observed_at": "2024-05-26T12:00:00Z",
+    "source": "demo",
+    "data_mode": "demo"
+  },
+  {
+    "location_name": "Chennai Coastal Station",
+    "latitude": 13.08,
+    "longitude": 80.27,
+    "wind_speed_kmh": 22.0,
+    "pressure_hpa": 1008.0,
+    "temperature_c": 31.0,
+    "sea_surface_temp_c": null,
+    "observed_at": "2024-05-26T12:00:00Z",
+    "source": "demo",
+    "data_mode": "demo"
+  },
+  {
+    "location_name": "Mumbai Coastal Station",
+    "latitude": 18.92,
+    "longitude": 72.83,
+    "wind_speed_kmh": 18.0,
+    "pressure_hpa": 1010.0,
+    "temperature_c": 30.2,
+    "sea_surface_temp_c": null,
+    "observed_at": "2024-05-26T12:00:00Z",
+    "source": "demo",
+    "data_mode": "demo"
+  },
+  {
+    "location_name": "Kolkata Coastal Station",
+    "latitude": 22.57,
+    "longitude": 88.36,
+    "wind_speed_kmh": 35.0,
+    "pressure_hpa": 996.0,
+    "temperature_c": 28.0,
+    "sea_surface_temp_c": null,
+    "observed_at": "2024-05-26T12:00:00Z",
+    "source": "demo",
+    "data_mode": "demo"
+  }
+]

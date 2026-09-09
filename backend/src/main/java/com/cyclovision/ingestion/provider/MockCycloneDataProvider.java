@@ -26,7 +26,7 @@ public class MockCycloneDataProvider implements CycloneDataProvider {
         ExternalCycloneDto c1 = new ExternalCycloneDto();
         c1.setExternalSource(getProviderName());
         c1.setExternalId(CYCLONE_1_ID);
-        c1.setName("Cyclone Alpha");
+        c1.setName("Mock Cyclone Alpha");
         c1.setBasin("Bay of Bengal");
         c1.setStatus("ACTIVE");
         c1.setCurrentCategory("Severe Cyclonic Storm");

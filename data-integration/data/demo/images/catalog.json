@@ -1,0 +1,47 @@
+[
+  {
+    "image_id": "demo_ir_cyclone_01",
+    "cyclone_id": "DEMO_AMPHAN_2020",
+    "captured_at": "2020-05-18T06:00:00Z",
+    "image_type": "infrared",
+    "source": "demo",
+    "storage_path": "data/demo/images/cyclone/demo_ir_cyclone_01.png",
+    "is_cyclone": true
+  },
+  {
+    "image_id": "demo_vis_cyclone_02",
+    "cyclone_id": "DEMO_BIPARJOY_2023",
+    "captured_at": "2023-06-12T09:00:00Z",
+    "image_type": "visible",
+    "source": "demo",
+    "storage_path": "data/demo/images/cyclone/demo_vis_cyclone_02.png",
+    "is_cyclone": true
+  },
+  {
+    "image_id": "demo_wv_cyclone_03",
+    "cyclone_id": "DEMO_MOCHA_2023",
+    "captured_at": "2023-05-13T12:00:00Z",
+    "image_type": "water_vapor",
+    "source": "demo",
+    "storage_path": "data/demo/images/cyclone/demo_wv_cyclone_03.png",
+    "is_cyclone": true
+  },
+  {
+    "image_id": "demo_ir_noncyclone_01",
+    "cyclone_id": null,
+    "captured_at": "2023-01-15T06:00:00Z",
+    "image_type": "infrared",
+    "source": "demo",
+    "storage_path": "data/demo/images/non_cyclone/demo_ir_noncyclone_01.png",
+    "is_cyclone": false
+  },
+  {
+    "image_id": "demo_vis_noncyclone_02",
+    "cyclone_id": null,
+    "captured_at": "2023-03-20T09:00:00Z",
+    "image_type": "visible",
+    "source": "demo",
+    "storage_path": "data/demo/images/non_cyclone/demo_vis_noncyclone_02.png",
+    "is_cyclone": false
+  }
+]

@@ -1,0 +1,52 @@
+============================================================
+CycloVision Data Validation Report
+Generated: 2026-09-09T13:37:34.574389+00:00
+============================================================
+
+-- IBTrACS Observations --
+Total observations:      62848
+Valid observations:       62848
+Missing coordinates:     0
+Missing wind:            54918
+Missing pressure:        54620
+Invalid timestamps:      0
+Invalid coordinates:     0
+Duplicate observations:  0
+Validation status:       PASS
+
+-- Track Integrity --
+Total tracks:            1858
+Valid tracks:            1816
+Tracks with issues:      42
+Validation status:       PASS
+
+Sample issues:
+  - Track 1882212N20088: only 1 point(s)
+  - Track 1884325N13083: only 1 point(s)
+  - Track 1907135N18092: only 1 point(s)
+  - Track 1907238N21087: only 1 point(s)
+  - Track 1925318N15094: only 1 point(s)
+  - Track 1932145N11075: only 1 point(s)
+  - Track 1934109N15091: only 1 point(s)
+  - Track 1935028N23066: only 1 point(s)
+  - Track 1935176N19087: only 1 point(s)
+  - Track 1935217N21089: only 1 point(s)
+
+Total cyclones:          1858
+
+-- Real Satellite Dataset (NASA IMPACT) --
+Total satellite images:  320
+Valid image files:       320
+Cyclone images:          209
+Non-cyclone images:      111
+Missing image files:     0
+Validation status:       PASS
+
+-- Demo Scenarios --
+Total scenarios:         5
+Valid scenarios:         5
+Validation status:       PASS
+
+============================================================
+OVERALL VALIDATION: PASS
+============================================================

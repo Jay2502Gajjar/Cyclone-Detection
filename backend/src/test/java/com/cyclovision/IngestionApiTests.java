@@ -34,8 +34,12 @@ class IngestionApiTests {
         assertNotNull(cyclones);
         assertTrue(cyclones.size() > 0);
 
-        // Get the first one
-        Map<String, Object> firstCyclone = (Map<String, Object>) cyclones.get(0);
+        // Get the ingested Mock Cyclone Alpha
+        Map<String, Object> firstCyclone = cyclones.stream()
+                .map(c -> (Map<String, Object>) c)
+                .filter(c -> "Mock Cyclone Alpha".equals(c.get("name")))
+                .findFirst()
+                .orElse((Map<String, Object>) cyclones.get(0));
         String cycloneId = (String) firstCyclone.get("id");
         assertNotNull(cycloneId);
 

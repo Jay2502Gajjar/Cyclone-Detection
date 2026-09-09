@@ -1,0 +1,80 @@
+{
+  "scenario_id": "scenario_05",
+  "title": "Landfall Threat — REMAL (2024)",
+  "description": "Severe Cyclonic Storm REMAL approaching the coast of West Bengal and Bangladesh. Demonstrates a landfall-threatening scenario with moderate intensity. Data curated from public records, marked as demo.",
+  "cyclone": {
+    "id": "DEMO_REMAL_2024",
+    "name": "REMAL",
+    "basin": "NI",
+    "season_year": 2024,
+    "status": "demo"
+  },
+  "latest_observation": {
+    "observed_at": "2024-05-26T12:00:00+00:00",
+    "latitude": 20.8,
+    "longitude": 88.5,
+    "wind_speed_kmh": 110.0,
+    "pressure_hpa": 978.0,
+    "movement_direction_deg": 10.0,
+    "movement_speed_kmh": 15.0,
+    "intensity_category": "Severe Cyclonic Storm"
+  },
+  "historical_observations": [
+    {
+      "observed_at": "2024-05-24T00:00:00+00:00",
+      "latitude": 17.5,
+      "longitude": 89.0,
+      "wind_speed_kmh": 55.0,
+      "pressure_hpa": 1000.0,
+      "movement_direction_deg": 5.0,
+      "movement_speed_kmh": 12.0,
+      "intensity_category": "Deep Depression"
+    },
+    {
+      "observed_at": "2024-05-25T00:00:00+00:00",
+      "latitude": 18.8,
+      "longitude": 88.8,
+      "wind_speed_kmh": 75.0,
+      "pressure_hpa": 992.0,
+      "movement_direction_deg": 8.0,
+      "movement_speed_kmh": 13.0,
+      "intensity_category": "Cyclonic Storm"
+    },
+    {
+      "observed_at": "2024-05-26T00:00:00+00:00",
+      "latitude": 19.8,
+      "longitude": 88.6,
+      "wind_speed_kmh": 95.0,
+      "pressure_hpa": 984.0,
+      "movement_direction_deg": 10.0,
+      "movement_speed_kmh": 14.0,
+      "intensity_category": "Severe Cyclonic Storm"
+    }
+  ],
+  "weather": {
+    "latitude": 20.8,
+    "longitude": 88.5,
+    "wind_speed_kmh": 110.0,
+    "pressure_hpa": 978.0,
+    "temperature_c": 29.5,
+    "sea_surface_temp_c": null,
+    "observed_at": "2024-05-26T12:00:00+00:00",
+    "source": "demo"
+  },
+  "satellite": {
+    "image_id": "demo_ir_cyclone_01",
+    "cyclone_id": "DEMO_REMAL_2024",
+    "captured_at": "2024-05-26T06:00:00+00:00",
+    "image_type": "infrared",
+    "source": "demo",
+    "storage_path": "data/demo/images/cyclone/demo_ir_cyclone_01.png",
+    "is_cyclone": true
+  },
+  "source": {
+    "mode": "demo",
+    "provider": "demo",
+    "processing_script": "scripts/create_demo_scenarios.py",
+    "processing_version": "0.1.0"
+  },
+  "created_at": "2026-09-09T04:47:40.210154+00:00"
+}

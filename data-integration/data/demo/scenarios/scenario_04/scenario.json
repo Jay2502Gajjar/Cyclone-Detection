@@ -1,0 +1,80 @@
+{
+  "scenario_id": "scenario_04",
+  "title": "Weakening Post-Landfall — MOCHA (2023)",
+  "description": "Cyclone MOCHA weakening after making landfall in Myanmar. Demonstrates a storm transitioning from Extremely Severe to Depression. Data curated from public records, marked as demo.",
+  "cyclone": {
+    "id": "DEMO_MOCHA_2023",
+    "name": "MOCHA",
+    "basin": "NI",
+    "season_year": 2023,
+    "status": "demo"
+  },
+  "latest_observation": {
+    "observed_at": "2023-05-14T18:00:00+00:00",
+    "latitude": 21.5,
+    "longitude": 93.5,
+    "wind_speed_kmh": 45.0,
+    "pressure_hpa": 998.0,
+    "movement_direction_deg": 30.0,
+    "movement_speed_kmh": 18.0,
+    "intensity_category": "Depression"
+  },
+  "historical_observations": [
+    {
+      "observed_at": "2023-05-13T06:00:00+00:00",
+      "latitude": 18.8,
+      "longitude": 92.5,
+      "wind_speed_kmh": 210.0,
+      "pressure_hpa": 928.0,
+      "movement_direction_deg": 15.0,
+      "movement_speed_kmh": 14.0,
+      "intensity_category": "Extremely Severe Cyclonic Storm"
+    },
+    {
+      "observed_at": "2023-05-14T00:00:00+00:00",
+      "latitude": 20.0,
+      "longitude": 93.0,
+      "wind_speed_kmh": 140.0,
+      "pressure_hpa": 960.0,
+      "movement_direction_deg": 20.0,
+      "movement_speed_kmh": 16.0,
+      "intensity_category": "Very Severe Cyclonic Storm"
+    },
+    {
+      "observed_at": "2023-05-14T12:00:00+00:00",
+      "latitude": 21.0,
+      "longitude": 93.3,
+      "wind_speed_kmh": 80.0,
+      "pressure_hpa": 988.0,
+      "movement_direction_deg": 25.0,
+      "movement_speed_kmh": 17.0,
+      "intensity_category": "Cyclonic Storm"
+    }
+  ],
+  "weather": {
+    "latitude": 21.5,
+    "longitude": 93.5,
+    "wind_speed_kmh": 45.0,
+    "pressure_hpa": 998.0,
+    "temperature_c": 29.0,
+    "sea_surface_temp_c": null,
+    "observed_at": "2023-05-14T18:00:00+00:00",
+    "source": "demo"
+  },
+  "satellite": {
+    "image_id": "demo_wv_cyclone_03",
+    "cyclone_id": "DEMO_MOCHA_2023",
+    "captured_at": "2023-05-13T12:00:00+00:00",
+    "image_type": "water_vapor",
+    "source": "demo",
+    "storage_path": "data/demo/images/cyclone/demo_wv_cyclone_03.png",
+    "is_cyclone": true
+  },
+  "source": {
+    "mode": "demo",
+    "provider": "demo",
+    "processing_script": "scripts/create_demo_scenarios.py",
+    "processing_version": "0.1.0"
+  },
+  "created_at": "2026-09-09T04:47:40.210154+00:00"
+}

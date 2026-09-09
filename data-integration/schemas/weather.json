@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WeatherData",
+  "description": "Weather conditions at a geographical coordinate",
+  "type": "object",
+  "properties": {
+    "latitude": {
+      "type": "number",
+      "minimum": -90.0,
+      "maximum": 90.0,
+      "description": "Latitude in decimal degrees"
+    },
+    "longitude": {
+      "type": "number",
+      "minimum": -180.0,
+      "maximum": 360.0,
+      "description": "Longitude in decimal degrees"
+    },
+    "wind_speed_kmh": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Wind speed in km/h"
+    },
+    "pressure_hpa": {
+      "type": ["number", "null"],
+      "minimum": 800,
+      "maximum": 1100,
+      "description": "Atmospheric pressure in hPa"
+    },
+    "temperature_c": {
+      "type": ["number", "null"],
+      "description": "Air temperature in degrees Celsius"
+    },
+    "sea_surface_temp_c": {
+      "type": ["number", "null"],
+      "description": "Sea surface temperature in degrees Celsius (null if unavailable from source)"
+    },
+    "observed_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Timestamp of weather observation in ISO 8601 format"
+    },
+    "source": {
+      "type": "string",
+      "default": "openweather",
+      "description": "Source identifier (e.g. openweather, demo)"
+    }
+  },
+  "required": ["latitude", "longitude"]
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DemoScenario",
+  "description": "A self-contained demo scenario for offline CycloVision operations",
+  "type": "object",
+  "properties": {
+    "scenario_id": {
+      "type": "string",
+      "description": "Unique scenario identifier (e.g. scenario_01)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable scenario title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the meteorological scenario"
+    },
+    "cyclone": {
+      "$ref": "cyclone.json"
+    },
+    "latest_observation": {
+      "$ref": "observation.json"
+    },
+    "historical_observations": {
+      "type": "array",
+      "items": {
+        "$ref": "observation.json"
+      },
+      "description": "Sequential historical observations for track rendering"
+    },
+    "weather": {
+      "oneOf": [
+        { "$ref": "weather.json" },
+        { "type": "null" }
+      ]
+    },
+    "satellite": {
+      "type": ["object", "null"],
+      "properties": {
+        "image_id": { "type": "string" },
+        "cyclone_id": { "type": ["string", "null"] },
+        "captured_at": { "type": ["string", "null"], "format": "date-time" },
+        "image_type": { "type": "string", "enum": ["visible", "infrared", "water_vapor"] },
+        "source": { "type": "string" },
+        "storage_path": { "type": "string" },
+        "is_cyclone": { "type": "boolean" }
+      },
+      "required": ["image_id", "storage_path"]
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["real", "cached", "demo", "synthetic"] },
+        "provider": { "type": "string" },
+        "source_url": { "type": ["string", "null"] },
+        "downloaded_at": { "type": ["string", "null"] },
+        "processing_script": { "type": ["string", "null"] },
+        "processing_version": { "type": ["string", "null"] },
+        "original_filename": { "type": ["string", "null"] }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["scenario_id", "title", "description", "cyclone", "latest_observation"]
+}

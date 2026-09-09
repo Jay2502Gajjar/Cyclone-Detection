@@ -12,7 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -32,7 +35,6 @@ public class CycloneIngestionService {
         this.observationRepository = observationRepository;
     }
 
-    @Transactional
     public void runIngestion() {
         for (CycloneDataProvider provider : dataProviders) {
             String providerName = provider.getProviderName();
@@ -49,7 +51,8 @@ public class CycloneIngestionService {
         }
     }
 
-    private void processCyclone(String providerName, ExternalCycloneDto extCyclone, CycloneDataProvider provider) {
+    @Transactional
+    public void processCyclone(String providerName, ExternalCycloneDto extCyclone, CycloneDataProvider provider) {
         String externalId = extCyclone.getExternalId();
 
         Optional<Cyclone> existingCyclone = cycloneRepository.findByExternalSourceAndExternalId(providerName, externalId);
@@ -74,36 +77,44 @@ public class CycloneIngestionService {
         cyclone = cycloneRepository.save(cyclone);
 
         List<ExternalObservationDto> observations = provider.fetchObservations(externalId);
+        if (observations == null || observations.isEmpty()) {
+            return;
+        }
+
+        Map<String, CycloneObservation> existingMap = new HashMap<>();
+        if (cyclone.getId() != null) {
+            List<CycloneObservation> existingList = observationRepository.findByCycloneIdOrderByObservedAtAsc(cyclone.getId());
+            for (CycloneObservation obs : existingList) {
+                if (obs.getSourceRecordId() != null) {
+                    existingMap.put(obs.getSourceRecordId(), obs);
+                }
+            }
+        }
+
+        List<CycloneObservation> toSave = new ArrayList<>(observations.size());
         for (ExternalObservationDto extObs : observations) {
-            processObservation(cyclone, extObs);
+            String recordId = extObs.getSourceRecordId();
+            CycloneObservation observation = recordId != null ? existingMap.get(recordId) : null;
+            if (observation == null) {
+                observation = new CycloneObservation();
+                observation.setCyclone(cyclone);
+                observation.setSourceRecordId(recordId);
+            }
+
+            observation.setObservedAt(extObs.getObservedAt());
+            observation.setLatitude(extObs.getLatitude());
+            observation.setLongitude(extObs.getLongitude());
+            observation.setWindSpeedKph(extObs.getWindSpeedKph());
+            observation.setPressureHpa(extObs.getPressureHpa());
+            observation.setMovementSpeedKph(extObs.getMovementSpeedKph());
+            observation.setMovementDirectionDegrees(extObs.getMovementDirectionDegrees());
+            
+            String source = extObs.getSource() != null ? extObs.getSource() : cyclone.getExternalSource();
+            observation.setSource(source);
+
+            toSave.add(observation);
         }
-    }
 
-    private void processObservation(Cyclone cyclone, ExternalObservationDto extObs) {
-        Optional<CycloneObservation> existingObservation = observationRepository.findByCycloneIdAndSourceRecordId(
-                cyclone.getId(), extObs.getSourceRecordId()
-        );
-
-        CycloneObservation observation;
-        if (existingObservation.isPresent()) {
-            observation = existingObservation.get();
-        } else {
-            observation = new CycloneObservation();
-            observation.setCyclone(cyclone);
-            observation.setSourceRecordId(extObs.getSourceRecordId());
-        }
-
-        observation.setObservedAt(extObs.getObservedAt());
-        observation.setLatitude(extObs.getLatitude());
-        observation.setLongitude(extObs.getLongitude());
-        observation.setWindSpeedKph(extObs.getWindSpeedKph());
-        observation.setPressureHpa(extObs.getPressureHpa());
-        observation.setMovementSpeedKph(extObs.getMovementSpeedKph());
-        observation.setMovementDirectionDegrees(extObs.getMovementDirectionDegrees());
-        
-        String source = extObs.getSource() != null ? extObs.getSource() : cyclone.getExternalSource();
-        observation.setSource(source);
-
-        observationRepository.save(observation);
+        observationRepository.saveAll(toSave);
     }
 }

@@ -22,6 +22,7 @@ public class IngestionController {
     public ResponseEntity<Map<String, Object>> triggerIngestion() {
         ingestionService.runIngestion();
         return ResponseEntity.ok(Map.of(
+            "status", "success",
             "success", true,
             "message", "Cyclone ingestion completed successfully"
         ));

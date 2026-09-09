@@ -14,8 +14,15 @@ export default defineConfig({
   },
   vite: {
     server: {
+      host: true,
       port: 5173,
-      strictPort: false,
+      proxy: {
+        "/api": {
+          target: "http://localhost:8080",
+          changeOrigin: true,
+          secure: false,
+        },
+      },
     },
   },
 });

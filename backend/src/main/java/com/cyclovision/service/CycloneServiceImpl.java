@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CycloneServiceImpl implements CycloneService {
 
+    public static final String PRODUCTION_SOURCE = "IBTrACS";
+
     private final CycloneRepository cycloneRepository;
     private final CycloneObservationRepository observationRepository;
 
@@ -32,9 +34,9 @@ public class CycloneServiceImpl implements CycloneService {
     public List<CycloneSummaryResponse> getAllCyclones(String status) {
         List<Cyclone> cyclones;
         if (status != null && !status.trim().isEmpty()) {
-            cyclones = cycloneRepository.findByStatus(status);
+            cyclones = cycloneRepository.findByStatusIgnoreCaseAndExternalSource(status.trim(), PRODUCTION_SOURCE);
         } else {
-            cyclones = cycloneRepository.findAll();
+            cyclones = cycloneRepository.findByExternalSource(PRODUCTION_SOURCE);
         }
         return cyclones.stream().map(this::mapToSummary).collect(Collectors.toList());
     }

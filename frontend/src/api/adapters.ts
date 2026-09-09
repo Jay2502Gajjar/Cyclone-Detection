@@ -28,7 +28,7 @@ export function degreesToCompass(deg: number | null | undefined): string {
 export function mapObservationToTrackPoint(obs: BackendObservation): TrackPoint {
   const d = obs.observedAt ? new Date(obs.observedAt) : null;
   const timeStr = d && !isNaN(d.getTime())
-    ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })
+    ? `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")} ${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}Z`
     : "—";
 
   return {
@@ -257,6 +257,9 @@ export function buildFrontendCyclone(
     name: summary.name || "UNNAMED CYCLONE",
     basin: summary.basin || "UNKNOWN BASIN",
     category: summary.currentCategory || "UNCLASSIFIED",
+    status: summary.status || "historical",
+    externalSource: summary.externalSource ?? null,
+    externalId: summary.externalId ?? null,
     windKph,
     pressureHpa,
     lat,

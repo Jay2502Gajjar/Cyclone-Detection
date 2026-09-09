@@ -24,4 +24,6 @@ public interface CycloneObservationRepository
     Optional<CycloneObservation> findFirstByCycloneIdOrderByObservedAtDesc(
             UUID cycloneId
     );
+
+    long countBySource(String source);
 }

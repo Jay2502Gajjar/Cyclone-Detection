@@ -74,6 +74,9 @@ export interface Cyclone {
   name: string;
   basin: string;
   category: string;
+  status?: string;
+  externalSource?: string | null;
+  externalId?: string | null;
   windKph: number;
   pressureHpa: number;
   lat: number;

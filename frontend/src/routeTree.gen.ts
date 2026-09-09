@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AiRouteImport } from './routes/ai'
 import { Route as AlertsRouteImport } from './routes/alerts'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as HistoricalRouteImport } from './routes/historical'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as PredictionsRouteImport } from './routes/predictions'
@@ -29,6 +30,11 @@ const AiRoute = AiRouteImport.update({
 const AlertsRoute = AlertsRouteImport.update({
   id: '/alerts',
   path: '/alerts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoricalRoute = HistoricalRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
   '/alerts': typeof AlertsRoute
+  '/dashboard': typeof DashboardRoute
   '/historical': typeof HistoricalRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
   '/alerts': typeof AlertsRoute
+  '/dashboard': typeof DashboardRoute
   '/historical': typeof HistoricalRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
@@ -68,20 +76,36 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
   '/alerts': typeof AlertsRoute
+  '/dashboard': typeof DashboardRoute
   '/historical': typeof HistoricalRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ai' | '/alerts' | '/historical' | '/map' | '/predictions'
+  fullPaths:
+    | '/'
+    | '/ai'
+    | '/alerts'
+    | '/dashboard'
+    | '/historical'
+    | '/map'
+    | '/predictions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ai' | '/alerts' | '/historical' | '/map' | '/predictions'
+  to:
+    | '/'
+    | '/ai'
+    | '/alerts'
+    | '/dashboard'
+    | '/historical'
+    | '/map'
+    | '/predictions'
   id:
     | '__root__'
     | '/'
     | '/ai'
     | '/alerts'
+    | '/dashboard'
     | '/historical'
     | '/map'
     | '/predictions'
@@ -91,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AiRoute: typeof AiRoute
   AlertsRoute: typeof AlertsRoute
+  DashboardRoute: typeof DashboardRoute
   HistoricalRoute: typeof HistoricalRoute
   MapRoute: typeof MapRoute
   PredictionsRoute: typeof PredictionsRoute
@@ -117,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/alerts'
       fullPath: '/alerts'
       preLoaderRoute: typeof AlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/historical': {
@@ -147,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AiRoute: AiRoute,
   AlertsRoute: AlertsRoute,
+  DashboardRoute: DashboardRoute,
   HistoricalRoute: HistoricalRoute,
   MapRoute: MapRoute,
   PredictionsRoute: PredictionsRoute,

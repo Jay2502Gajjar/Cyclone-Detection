@@ -1,15 +1,34 @@
+import { useQuery } from "@tanstack/react-query";
+
 import { hasBackend } from "@/api/client";
+import { fetchIngestionStatus } from "@/api/ingestionApi";
 import { useCyclone } from "@/state/cyclone-store";
 
 export function DataSourceStrip() {
   const { cyclone } = useCyclone();
+
+  const { data: ingestStatus } = useQuery({
+    queryKey: ["ingest", "status"],
+    queryFn: fetchIngestionStatus,
+    staleTime: 60_000,
+    retry: 1,
+  });
+
+  const ingestLabel = ingestStatus
+    ? ingestStatus.running
+      ? `${ingestStatus.provider || "IBTrACS"} (Syncing)`
+      : `${ingestStatus.provider || "IBTrACS"} (${ingestStatus.lastRunSuccess ? "Idle · Healthy" : "Idle"})`
+    : hasBackend
+    ? "IBTrACS (Connected)"
+    : "Offline";
+
   const items = [
     { l: "Data Source", v: hasBackend ? "Spring Boot REST API" : "Offline" },
-    { l: "Basin", v: cyclone.basin || "North Indian" },
-    { l: "Category", v: cyclone.category || "Tropical Cyclone" },
-    { l: "SST", v: cyclone.sstC !== undefined ? `${cyclone.sstC} °C` : "Pending API" },
-    { l: "Humidity", v: cyclone.humidity !== undefined ? `${cyclone.humidity}%` : "Pending API" },
-    { l: "Telemetry", v: cyclone.track.length > 0 ? `${cyclone.track.length} points` : "None" },
+    { l: "Ingestion Status", v: ingestLabel },
+    { l: "Basin", v: cyclone.basin || "NI" },
+    { l: "Category", v: cyclone.category || "Unclassified" },
+    { l: "Status", v: cyclone.status ? cyclone.status.toUpperCase() : "HISTORICAL" },
+    { l: "Telemetry", v: cyclone.track.length > 0 ? `${cyclone.track.length} obs points` : "None" },
   ];
 
   return (

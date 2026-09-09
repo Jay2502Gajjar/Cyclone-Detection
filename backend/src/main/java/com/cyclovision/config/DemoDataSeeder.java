@@ -4,6 +4,7 @@ import com.cyclovision.entity.*;
 import com.cyclovision.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
+@ConditionalOnProperty(name = "cyclovision.demo-data.enabled", havingValue = "true", matchIfMissing = false)
 @RequiredArgsConstructor
 public class DemoDataSeeder implements CommandLineRunner {
 

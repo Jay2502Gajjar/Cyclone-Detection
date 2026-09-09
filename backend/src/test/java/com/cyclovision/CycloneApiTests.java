@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CycloneApiTests {
@@ -21,17 +22,34 @@ class CycloneApiTests {
     private TestRestTemplate restTemplate;
 
     @Test
-    void testGetEmptyCyclones() {
+    void testGetCyclonesReturnsOnlyIbtracsRecords() {
         ResponseEntity<List> response = restTemplate.getForEntity("/api/cyclones", List.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
+        List<?> cyclones = response.getBody();
+        assertNotNull(cyclones);
+        assertTrue(!cyclones.isEmpty(), "Should return real IBTrACS records");
+
+        for (Object item : cyclones) {
+            Map<?, ?> cyclone = (Map<?, ?>) item;
+            String source = (String) cyclone.get("externalSource");
+            assertNotNull(source, "externalSource must not be null for production cyclone API");
+            assertEquals("IBTrACS", source, "externalSource must be IBTrACS");
+            assertNotNull(cyclone.get("id"), "id must be present");
+            assertNotNull(cyclone.get("name"), "name must be present");
+            assertNotNull(cyclone.get("basin"), "basin must be present");
+            assertNotNull(cyclone.get("status"), "status must be present");
+        }
     }
 
     @Test
-    void testGetActiveCyclones() {
+    void testGetActiveCyclonesReturnsEmptyListAndNoMockOrNull() {
         ResponseEntity<List> response = restTemplate.getForEntity("/api/cyclones/active", List.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
+        List<?> active = response.getBody();
+        assertNotNull(active);
+        // Since real NOAA IBTrACS dataset has status = 'historical' for all storms,
+        // and mock/demo records are excluded, active cyclones list must be empty []
+        assertTrue(active.isEmpty(), "Active cyclone list must be empty when no IBTrACS storm is ACTIVE");
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.cyclovision.ingestion.provider;
 
 import com.cyclovision.ingestion.dto.ExternalCycloneDto;
 import com.cyclovision.ingestion.dto.ExternalObservationDto;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@ConditionalOnProperty(name = "cyclovision.mock-provider.enabled", havingValue = "true", matchIfMissing = false)
 public class MockCycloneDataProvider implements CycloneDataProvider {
 
     private static final String CYCLONE_1_ID = "MOCK-2026-01";

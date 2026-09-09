@@ -5,7 +5,7 @@ import { useCyclone } from "@/state/cyclone-store";
 import { Pill } from "@/components/ui/primitives";
 
 const NAV = [
-  { to: "/", label: "Overview" },
+  { to: "/dashboard", label: "Console" },
   { to: "/map", label: "Live Map" },
   { to: "/ai", label: "AI Analysis" },
   { to: "/predictions", label: "Predictions" },
@@ -33,7 +33,7 @@ export function TopNav() {
           <Link
             key={n.to}
             to={n.to}
-            activeOptions={{ exact: n.to === "/" }}
+            activeOptions={{ exact: (n.to as string) === "/" }}
             className="font-display text-[12px] tracking-tight text-muted-foreground transition-colors hover:text-foreground"
             activeProps={{ className: "text-foreground" }}
           >
@@ -43,10 +43,18 @@ export function TopNav() {
       </nav>
 
       <div className="flex items-center gap-3">
-        <span className="hidden font-display text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:inline">
-          UPD: {cyclone.updatedSecondsAgo}s ago
-        </span>
-        {live ? <Pill tone="amber">Live ●</Pill> : <Pill tone="muted">Demo Mode</Pill>}
+        {cyclone.track.length > 0 ? (
+          <span className="hidden font-display text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:inline">
+            Observed: {cyclone.track[cyclone.track.length - 1]?.t}
+          </span>
+        ) : null}
+        {cyclone.status === "active" ? (
+          <Pill tone="amber">Active Storm ●</Pill>
+        ) : live ? (
+          <Pill tone="muted">IBTrACS Verified</Pill>
+        ) : (
+          <Pill tone="danger">API Offline</Pill>
+        )}
         <button
           onClick={() => setPanel("alerts")}
           aria-label="Open alerts"

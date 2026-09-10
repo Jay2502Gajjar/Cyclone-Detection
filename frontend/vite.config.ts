@@ -14,7 +14,7 @@ export default defineConfig({
   },
   vite: {
     server: {
-      port: 8080,
+      port: 5173,
       watch: {
         ignored: ["**/.output/**", "**/.nitro/**", "**/.wrangler/**"],
       },

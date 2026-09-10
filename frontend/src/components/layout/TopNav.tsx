@@ -25,7 +25,7 @@ export function TopNav() {
           <span className="h-2 w-2 rounded-full bg-amber" />
           <span className="h-2 w-2 rounded-[2px] bg-ink" />
         </span>
-        <span className="font-display text-sm font-medium tracking-[0.18em]">CYCLOVISION</span>
+        <span className="font-display text-sm font-semibold tracking-[0.2em]">V<span className="text-primary">AI</span>YU</span>
       </Link>
 
       <nav className="hidden items-center gap-7 lg:flex">
@@ -43,18 +43,10 @@ export function TopNav() {
       </nav>
 
       <div className="flex items-center gap-3">
-        {cyclone.track.length > 0 ? (
-          <span className="hidden font-display text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:inline">
-            Observed: {cyclone.track[cyclone.track.length - 1]?.t}
-          </span>
-        ) : null}
-        {cyclone.status === "active" ? (
-          <Pill tone="amber">Active Storm ●</Pill>
-        ) : live ? (
-          <Pill tone="muted">IBTrACS Verified</Pill>
-        ) : (
-          <Pill tone="danger">API Offline</Pill>
-        )}
+        <span className="hidden font-display text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:inline">
+          UPD: {cyclone.updatedSecondsAgo}s ago
+        </span>
+        {live ? <Pill tone="amber">Live ●</Pill> : <Pill tone="muted">Telemetry Inactive</Pill>}
         <button
           onClick={() => setPanel("alerts")}
           aria-label="Open alerts"

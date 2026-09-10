@@ -52,7 +52,7 @@ export function EngineeringSpecs() {
 
           <ScrollReveal direction="up" delay={180} distance={18}>
             <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-[#94A3B8] sm:text-base">
-              Traditional numerical weather models require 4 to 6 hours per forecast cycle. CycloVision assimilates multi-spectral satellite telemetry in real-time, delivering sub-kilometer resolution 10-day forecasts in 42 seconds.
+              Traditional numerical weather models require 4 to 6 hours per forecast cycle. VAIYU assimilates multi-spectral satellite telemetry, delivering sub-kilometer resolution 10-day forecasts in 42 seconds.
             </p>
           </ScrollReveal>
         </div>

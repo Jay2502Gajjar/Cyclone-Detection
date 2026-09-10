@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { LandingNav } from "./LandingNav";
 import { HeroSection } from "./HeroSection";
 import { PartnerBar } from "./PartnerBar";
@@ -7,25 +6,9 @@ import { EngineeringSpecs } from "./EngineeringSpecs";
 import { BenchmarkTable } from "./BenchmarkTable";
 import { ApiAccessBanner } from "./ApiAccessBanner";
 import { LandingFooter } from "./LandingFooter";
-import { AccessModal } from "./AccessModal";
 import { ScrollProgressBar } from "./ScrollReveal";
 
 export function LandingPage() {
-  const [modalState, setModalState] = useState<{
-    isOpen: boolean;
-    type: "access" | "specs" | "key" | "specialist";
-  }>({
-    isOpen: false,
-    type: "access",
-  });
-
-  const openModal = (type: "access" | "specs" | "key" | "specialist") => {
-    setModalState({ isOpen: true, type });
-  };
-
-  const closeModal = () => {
-    setModalState((prev) => ({ ...prev, isOpen: false }));
-  };
 
   return (
     <div className="relative min-h-screen bg-[#06080D] text-[#F8FAFC] selection:bg-[#38BDF8] selection:text-[#090D14] overflow-x-hidden font-sans">
@@ -58,12 +41,12 @@ export function LandingPage() {
 
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* Top Navigation Bar */}
-        <LandingNav onRequestAccess={() => openModal("access")} />
+        <LandingNav />
 
         {/* Main Content Sections */}
         <main className="flex-1">
           {/* Hero Section */}
-          <HeroSection onOpenSpecs={() => openModal("specs")} />
+          <HeroSection />
 
           {/* Partner Meteorological Agencies Bar */}
           <PartnerBar />
@@ -78,22 +61,12 @@ export function LandingPage() {
           <BenchmarkTable />
 
           {/* Live API Access CTA Banner */}
-          <ApiAccessBanner
-            onRequestKey={() => openModal("key")}
-            onContactSpecialist={() => openModal("specialist")}
-          />
+          <ApiAccessBanner />
         </main>
 
         {/* Footer */}
         <LandingFooter />
       </div>
-
-      {/* Interactive Access Modal */}
-      <AccessModal
-        isOpen={modalState.isOpen}
-        type={modalState.type}
-        onClose={closeModal}
-      />
     </div>
   );
 }

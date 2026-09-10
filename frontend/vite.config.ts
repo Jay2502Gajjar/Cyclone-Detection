@@ -14,8 +14,10 @@ export default defineConfig({
   },
   vite: {
     server: {
-      host: true,
       port: 5173,
+      watch: {
+        ignored: ["**/.output/**", "**/.nitro/**", "**/.wrangler/**"],
+      },
       proxy: {
         "/api": {
           target: "http://localhost:8080",

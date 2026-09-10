@@ -60,7 +60,7 @@ export function BenchmarkTable() {
 
           <ScrollReveal direction="up" delay={180} distance={18}>
             <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-[#94A3B8] sm:text-base">
-              A rigorous comparative evaluation of CycloVision AI against industry-standard numerical simulation (NWP) systems and pure black-box AI emulators.
+              A rigorous comparative evaluation of VAIYU AI against industry-standard numerical simulation (NWP) systems and pure black-box AI emulators.
             </p>
           </ScrollReveal>
         </div>
@@ -82,7 +82,7 @@ export function BenchmarkTable() {
                   </th>
                   <th className="relative py-5 px-6 font-display text-[11px] font-bold tracking-wider text-[#38BDF8] uppercase bg-[#38BDF8]/[0.08]">
                     <div className="flex items-center gap-2">
-                      <span>CYCLOVISION CORE</span>
+                      <span>VAIYU CORE</span>
                       <span className="rounded-full bg-[#38BDF8] px-2 py-0.5 text-[9px] font-extrabold text-[#090D14] shadow-[0_0_10px_rgba(56,189,248,0.4)]">
                         V3.2
                       </span>

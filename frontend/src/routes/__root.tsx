@@ -79,10 +79,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CycloVision — Cyclone Intelligence" },
+      { title: "VAIYU — Cyclone Intelligence" },
       { name: "description", content: "Cyclone tracking, AI satellite analysis and landfall risk intelligence." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "CycloVision — Cyclone Intelligence" },
+      { property: "og:title", content: "VAIYU — Cyclone Intelligence" },
       { property: "og:description", content: "Cyclone tracking, AI satellite analysis and landfall risk intelligence." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

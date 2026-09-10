@@ -1,11 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
-interface LandingNavProps {
-  onRequestAccess: () => void;
-}
-
-export function LandingNav({ onRequestAccess }: LandingNavProps) {
+export function LandingNav() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0B0D13]/60 backdrop-blur-2xl transition-all duration-300">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
@@ -28,26 +24,20 @@ export function LandingNav({ onRequestAccess }: LandingNavProps) {
               <circle cx="12" cy="12" r="2" fill="currentColor" />
             </svg>
           </div>
-          <span className="font-display text-sm font-bold tracking-[0.22em] text-white">
-            CYCLOVISION
+          <span className="font-display text-sm font-bold tracking-[0.24em] text-white">
+            V<span className="text-[#38BDF8]">AI</span>YU
           </span>
         </Link>
 
-        {/* Right CTA Actions */}
-        <div className="flex items-center gap-3">
+        {/* Right CTA Action: Only Go to Dashboard */}
+        <div className="flex items-center">
           <Link
             to="/dashboard"
-            className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 text-[13px] font-medium tracking-wide text-[#94A3B8] backdrop-blur-xl transition-all hover:border-[#38BDF8]/40 hover:bg-white/[0.08] hover:text-white"
+            className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-lg bg-gradient-to-r from-[#0284C7] via-[#38BDF8] to-[#60A5FA] px-4 py-2 text-[13px] font-semibold text-[#090D14] shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(56,189,248,0.6)] hover:brightness-110 active:scale-[0.98]"
           >
-            Console
-          </Link>
-          <button
-            onClick={onRequestAccess}
-            className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-lg bg-gradient-to-r from-[#0284C7] via-[#38BDF8] to-[#60A5FA] px-4 py-2 text-[13px] font-semibold text-[#090D14] shadow-[0_0_25px_rgba(56,189,248,0.4)] transition-all duration-300 hover:shadow-[0_0_35px_rgba(56,189,248,0.7)] hover:brightness-110 active:scale-[0.98]"
-          >
-            <span>Request Access</span>
+            <span>Go to Dashboard</span>
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </button>
+          </Link>
         </div>
       </div>
     </header>

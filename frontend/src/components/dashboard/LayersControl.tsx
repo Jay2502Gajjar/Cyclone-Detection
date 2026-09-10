@@ -7,7 +7,6 @@ const ITEMS: { key: LayerKey; label: string }[] = [
   { key: "prediction", label: "Prediction" },
   { key: "corridor", label: "Confidence Corridor" },
   { key: "risk", label: "Risk Zones" },
-  { key: "satellite", label: "Satellite View" },
 ];
 
 export function LayersControl() {

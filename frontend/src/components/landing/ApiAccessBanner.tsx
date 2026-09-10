@@ -1,12 +1,8 @@
-import { ArrowUpRight, MessageSquare, Key } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowUpRight, Key } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
 
-interface ApiAccessBannerProps {
-  onRequestKey: () => void;
-  onContactSpecialist: () => void;
-}
-
-export function ApiAccessBanner({ onRequestKey, onContactSpecialist }: ApiAccessBannerProps) {
+export function ApiAccessBanner() {
   return (
     <section id="pricing" className="relative py-20 md:py-28">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
@@ -35,26 +31,18 @@ export function ApiAccessBanner({ onRequestKey, onContactSpecialist }: ApiAccess
 
               {/* Subtitle */}
               <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-[#94A3B8] sm:text-base">
-                Seamlessly route sub-kilometer gRPC trajectories into CycloVision Mission Console. Continuous prediction matrix for hurricane warning centers, naval operations, and critical infrastructure.
+                Seamlessly route sub-kilometer gRPC trajectories into VAIYU Mission Console. Continuous prediction matrix for hurricane warning centers, naval operations, and critical infrastructure.
               </p>
 
-              {/* Frosted Action Buttons */}
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-                <button
-                  onClick={onRequestKey}
-                  className="group relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#0284C7] via-[#38BDF8] to-[#60A5FA] px-6 py-3.5 text-sm font-semibold text-[#090D14] shadow-[0_0_30px_rgba(56,189,248,0.45)] transition-all duration-300 hover:shadow-[0_0_45px_rgba(56,189,248,0.7)] hover:brightness-110 active:scale-[0.98]"
+              {/* Frosted Action Button: Go to Dashboard */}
+              <div className="mt-10 flex items-center justify-center">
+                <Link
+                  to="/dashboard"
+                  className="group relative inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-[#0284C7] via-[#38BDF8] to-[#60A5FA] px-8 py-4 text-base font-semibold text-[#090D14] shadow-[0_0_35px_rgba(56,189,248,0.5)] transition-all duration-300 hover:shadow-[0_0_50px_rgba(56,189,248,0.75)] hover:brightness-110 active:scale-[0.98]"
                 >
-                  <span>Request API Key</span>
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </button>
-
-                <button
-                  onClick={onContactSpecialist}
-                  className="group inline-flex items-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3.5 text-sm font-medium text-[#F8FAFC] shadow-[0_8px_32px_0_rgba(0,0,0,0.37),inset_0_1px_1px_rgba(255,255,255,0.12)] backdrop-blur-2xl transition-all duration-300 hover:border-[#38BDF8]/40 hover:bg-white/[0.08] hover:shadow-[0_0_25px_rgba(56,189,248,0.2)] active:scale-[0.98]"
-                >
-                  <MessageSquare className="h-4 w-4 text-[#94A3B8] transition-colors group-hover:text-[#38BDF8]" />
-                  <span>Talk to Meteorology Specialist</span>
-                </button>
+                  <span>Go to Dashboard</span>
+                  <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
               </div>
             </div>
           </div>

@@ -16,10 +16,10 @@ import { fetchPrediction, triggerPrediction } from "@/api/predictionApi";
 import { fetchSituationReport } from "@/api/reportApi";
 import { fetchRisk } from "@/api/riskApi";
 import { runSatelliteAnalysis } from "@/api/satelliteApi";
-import type { BackendCycloneSummary, Cyclone, ForecastPoint, SatelliteAnalysis } from "@/types/cyclone";
+import type { Cyclone, ForecastPoint, SatelliteAnalysis } from "@/types/cyclone";
 
 export type ViewMode = "3D" | "2D";
-export type LayerKey = "wind" | "history" | "prediction" | "corridor" | "risk" | "satellite";
+export type LayerKey = "wind" | "history" | "prediction" | "corridor" | "risk";
 export type PanelKey = "risk" | "historical" | "report" | "alerts" | "whatif" | null;
 
 interface SatelliteState {
@@ -38,10 +38,6 @@ interface PredictionState {
 
 interface Store {
   cyclones: Cyclone[];
-  activeCyclones: BackendCycloneSummary[];
-  allCyclones: BackendCycloneSummary[];
-  activeCount: number;
-  hasActive: boolean;
   cyclone: Cyclone;
   selectedId: string;
   selectCyclone: (id: string) => void;
@@ -83,15 +79,13 @@ const defaultLayers: Record<LayerKey, boolean> = {
   prediction: true,
   corridor: true,
   risk: true,
-  satellite: false,
 };
 
 const EMPTY_FALLBACK_CYCLONE: Cyclone = {
-  id: "",
-  name: "NO CYCLONE SELECTED",
-  basin: "—",
-  category: "UNCLASSIFIED",
-  status: "historical",
+  id: "empty",
+  name: "NO CYCLONES AVAILABLE",
+  basin: "INDIAN OCEAN",
+  category: "MONITORING",
   windKph: 0,
   pressureHpa: 0,
   lat: 0,
@@ -118,7 +112,7 @@ const EMPTY_FALLBACK_CYCLONE: Cyclone = {
     coastalRisk: "LOW",
     distanceToCoastKm: 0,
     regions: [],
-    explanation: "No active risk calculation available.",
+    explanation: "No active storm system detected in monitored basins.",
   },
   explain: {
     classification: 0,
@@ -133,55 +127,48 @@ const EMPTY_FALLBACK_CYCLONE: Cyclone = {
 };
 
 export function CycloneProvider({ children }: { children: ReactNode }) {
-  // Query 1: Fetch all cyclones (1,858 IBTrACS records from canonical backend)
+  // Query 1: Fetch active cyclones from backend
   const {
-    data: allCyclonesData,
-    isLoading: isAllLoading,
-    error: allError,
-    refetch: refetchAll,
-  } = useQuery({
-    queryKey: ["cyclones", "all"],
-    queryFn: () => fetchAllCyclones(),
-    staleTime: 60_000,
-    retry: 1,
-  });
-
-  // Query 2: Fetch active cyclones ([] in IBTrACS when no active storm)
-  const {
-    data: activeCyclonesData,
-    isLoading: isActiveLoading,
-    error: activeError,
-    refetch: refetchActive,
+    data: rawCyclones,
+    isLoading: isListLoading,
+    error: listError,
+    refetch: refetchList,
   } = useQuery({
     queryKey: ["cyclones", "active"],
-    queryFn: () => fetchActiveCyclones(),
+    queryFn: async () => {
+      try {
+        const active = await fetchActiveCyclones();
+        if (active && active.length > 0) return active;
+        const all = await fetchAllCyclones();
+        return all && all.length > 0 ? all : null;
+      } catch {
+        // Graceful fallback to rich local/demo dataset when backend is initializing or offline
+        return null;
+      }
+    },
     staleTime: 60_000,
     retry: 1,
   });
 
-  const allCyclones = useMemo(() => allCyclonesData ?? [], [allCyclonesData]);
-  const activeCyclones = useMemo(() => activeCyclonesData ?? [], [activeCyclonesData]);
-  const activeCount = activeCyclones.length;
-  const hasActive = activeCount > 0;
-  const isListLoading = isAllLoading || isActiveLoading;
-  const listError = allError || activeError;
-
-  // Track selected cyclone UUID
+  // Track selected cyclone ID
   const [selectedId, setSelectedId] = useState<string>("");
 
-  // Update selectedId when cyclones load: prefer active cyclone, otherwise default to first historical record
+  // Update selectedId when cyclones load
   useEffect(() => {
-    if (allCyclones.length > 0) {
-      if (!selectedId || !allCyclones.some((c) => c.id === selectedId)) {
-        const target = hasActive ? activeCyclones[0] : allCyclones[0];
+    if (rawCyclones && rawCyclones.length > 0) {
+      if (!selectedId || !rawCyclones.some((c) => c.id === selectedId)) {
+        const firstNamed = rawCyclones.find(
+          (c) => c.name && !c.name.toUpperCase().startsWith("UNNAMED") && !c.name.toUpperCase().startsWith("NOT_NAMED")
+        );
+        const target = firstNamed || rawCyclones[0];
         if (target) {
           setSelectedId(target.id);
         }
       }
     }
-  }, [allCyclones, activeCyclones, hasActive, selectedId]);
+  }, [rawCyclones, selectedId]);
 
-  // Query 3: Fetch detailed cyclone data for selectedId (UUID)
+  // Query 2: Fetch detailed cyclone data for selectedId
   const {
     data: selectedDetail,
     isLoading: isDetailLoading,
@@ -207,7 +194,7 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
       const backendAlerts = alerts.status === "fulfilled" ? alerts.value : [];
 
       if (!backendDetail) {
-        const summary = allCyclones.find((c) => c.id === selectedId);
+        const summary = rawCyclones?.find((c) => c.id === selectedId);
         if (!summary) return null;
         return buildFrontendCyclone(summary, backendObs, backendRisk, null, backendHist, backendAlerts);
       }
@@ -218,12 +205,12 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
     staleTime: 30_000,
   });
 
-  const isLive = Boolean(!listError && (allCyclones.length > 0 || activeCyclones.length > 0));
+  const isLive = Boolean(rawCyclones && rawCyclones.length > 0 && !listError);
 
-  // Map backend summary list into Cyclone models without mock fallbacks
+  // Map initial summary cyclones to basic Cyclone objects
   const cyclones: Cyclone[] = useMemo(() => {
-    if (allCyclones.length > 0) {
-      return allCyclones.map((summary) => {
+    if (rawCyclones && rawCyclones.length > 0) {
+      return rawCyclones.map((summary) => {
         if (selectedDetail && selectedDetail.id === summary.id) {
           return selectedDetail;
         }
@@ -231,16 +218,13 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
       });
     }
     return [];
-  }, [allCyclones, selectedDetail]);
+  }, [rawCyclones, selectedDetail]);
 
   const cyclone: Cyclone = useMemo(() => {
     if (selectedDetail) return selectedDetail;
-    if (selectedId) {
-      const found = cyclones.find((c) => c.id === selectedId);
-      if (found) return found;
-    }
-    if (cyclones.length > 0 && cyclones[0]) return cyclones[0];
-    return EMPTY_FALLBACK_CYCLONE;
+    const found = cyclones.find((c) => c.id === selectedId);
+    if (found) return found;
+    return cyclones[0] ?? EMPTY_FALLBACK_CYCLONE;
   }, [selectedDetail, cyclones, selectedId]);
 
   const [view, setView] = useState<ViewMode>("3D");
@@ -292,8 +276,8 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
       setSatellite((s) => ({
         ...s,
         status: "done",
-        step: "DEFAULT ANALYSIS RETAINED",
-        result: cyclone.satellite,
+        step: "ANALYSIS UNAVAILABLE",
+        result: null,
         view: "original",
       }));
     }
@@ -314,13 +298,16 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
         points = cyclone.forecast;
       }
     }
+    if (points.length === 0 && cyclone.forecast.length > 0) {
+      points = cyclone.forecast;
+    }
     setPrediction((p) => ({ ...p, points }));
     for (const point of points) {
       await new Promise((r) => setTimeout(r, 250));
       setPrediction((p) => ({ ...p, revealedHours: [...p.revealedHours, point.hour] }));
     }
     setPrediction((p) => ({ ...p, status: "done" }));
-  }, [cyclone.id, cyclone.lat, cyclone.lon, cyclone.forecast]);
+  }, [cyclone.id, cyclone.forecast]);
 
   const generateReport = useCallback(async () => {
     if (!cyclone.id || cyclone.id === "empty") return;
@@ -329,7 +316,7 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
       const rep = await fetchSituationReport(cyclone.id);
       const formatted = [
         `============================================================`,
-        `CYCLOVISION SITUATION REPORT — ${rep.cycloneName?.toUpperCase() || cyclone.name}`,
+        `VAIYU SITUATION REPORT — ${rep.cycloneName?.toUpperCase() || cyclone.name}`,
         `GENERATED AT: ${new Date(rep.generatedAt).toLocaleString()}`,
         `============================================================`,
         ``,
@@ -349,43 +336,24 @@ export function CycloneProvider({ children }: { children: ReactNode }) {
       ].join("\n");
       setReport({ status: "done", text: formatted });
     } catch {
-      // Fallback formatting from cyclone properties
-      const fallbackReport = [
-        `CYCLOVISION SITUATION REPORT — ${cyclone.name} / ${cyclone.basin.toUpperCase()}`,
-        ``,
-        `STATUS            ${cyclone.category}`,
-        `POSITION          ${cyclone.lat.toFixed(1)}°N ${cyclone.lon.toFixed(1)}°E`,
-        `INTENSITY         ${cyclone.windKph} km/h sustained · ${cyclone.pressureHpa} hPa central pressure`,
-        `MOVEMENT          ${cyclone.movementDir} at ${cyclone.movementKph} km/h`,
-        ``,
-        `RISK ASSESSMENT   ${cyclone.risk.level} (${cyclone.risk.score}/100)`,
-        `LANDFALL          ${cyclone.risk.landfallProbability}% probability`,
-        `AFFECTED REGIONS  ${cyclone.risk.regions.join(", ")}`,
-      ].join("\n");
-      setReport({ status: "done", text: fallbackReport });
+      setReport({
+        status: "done",
+        text: `Situation report unavailable from backend for ${cyclone.name}. (API error or service unreachable)`,
+      });
     }
   }, [cyclone]);
 
   const focusGlobe = useCallback(() => setCameraNonce((n) => n + 1), []);
 
   const refetch = useCallback(() => {
-    void refetchAll();
-    void refetchActive();
+    void refetchList();
     void refetchDetail();
-  }, [refetchAll, refetchActive, refetchDetail]);
+  }, [refetchList, refetchDetail]);
 
-  const errorMessage = listError instanceof Error
-    ? `Backend API Error (${listError.message}). Verify backend is running at http://localhost:8080.`
-    : detailError instanceof Error
-    ? `Cyclone Data Error (${detailError.message})`
-    : null;
+  const errorMessage = listError instanceof Error ? listError.message : detailError instanceof Error ? detailError.message : null;
 
   const value: Store = {
     cyclones,
-    activeCyclones,
-    allCyclones,
-    activeCount,
-    hasActive,
     cyclone,
     selectedId,
     selectCyclone,

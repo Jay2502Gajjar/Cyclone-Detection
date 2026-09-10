@@ -64,8 +64,8 @@ export function LandingFooter() {
                   <circle cx="12" cy="12" r="2" fill="currentColor" />
                 </svg>
               </div>
-              <span className="font-display text-sm font-bold tracking-[0.22em] text-white">
-                CYCLOVISION
+              <span className="font-display text-sm font-bold tracking-[0.24em] text-white">
+                V<span className="text-[#38BDF8]">AI</span>YU
               </span>
             </Link>
 
@@ -102,7 +102,7 @@ export function LandingFooter() {
         {/* Bottom Legal & Compliance Strip */}
         <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.06] pt-8 text-[11px] text-[#94A3B8]">
           <div>
-            © 2026 CycloVision Inc. All rights reserved. Sub-kilometer neural simulation is active in all operational conditions.
+            © 2026 VAIYU Inc. All rights reserved. Sub-kilometer neural simulation is active in all operational conditions.
           </div>
           <div className="flex items-center gap-4">
             <span className="text-[#38BDF8] font-medium">ITAR Compliant</span>

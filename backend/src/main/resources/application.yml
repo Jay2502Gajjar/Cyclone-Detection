@@ -44,9 +44,9 @@ cyclovision:
     enabled: false
   ingestion:
     scheduler:
-      enabled: true
-      fixed-delay-ms: 21600000
-      initial-delay-ms: 60000
+      enabled: ${INGESTION_SCHEDULER_ENABLED:true}
+      fixed-delay-ms: ${INGESTION_FIXED_DELAY_MS:21600000}
+      initial-delay-ms: ${INGESTION_INITIAL_DELAY_MS:21600000}
 
 management:
   endpoints:

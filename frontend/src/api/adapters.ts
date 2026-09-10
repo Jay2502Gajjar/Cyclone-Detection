@@ -28,7 +28,7 @@ export function degreesToCompass(deg: number | null | undefined): string {
 export function mapObservationToTrackPoint(obs: BackendObservation): TrackPoint {
   const d = obs.observedAt ? new Date(obs.observedAt) : null;
   const timeStr = d && !isNaN(d.getTime())
-    ? `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")} ${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}Z`
+    ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })
     : "—";
 
   return {
@@ -110,6 +110,92 @@ export function mapPrediction(pred: BackendPrediction | null): ForecastPoint[] {
       windKph: Math.round(100 + idx * 10),
       confidenceRadiusKm: p.confidenceRadiusKm ?? 50,
       intensityTrend,
+    };
+  });
+}
+
+/**
+ * Generates future prediction waypoints (+6H, +12H, +24H, +48H) for demo prototype
+ * across every cyclone dataset, projected from actual observations or movement bearing.
+ */
+export function generatePredictionForecast(
+  lat: number,
+  lon: number,
+  windKph: number,
+  observations: BackendObservation[] = [],
+  movementDirectionDegrees?: number | null,
+): ForecastPoint[] {
+  if (lat === 0 && lon === 0) {
+    return [];
+  }
+
+  let stepLat = 0;
+  let stepLon = 0;
+
+  // 1. Calculate base 6-hour vector from the last two real observations if available
+  if (observations.length >= 2) {
+    const last = observations[observations.length - 1];
+    const prev = observations[observations.length - 2];
+    if (
+      last &&
+      prev &&
+      typeof last.latitude === "number" &&
+      typeof prev.latitude === "number" &&
+      typeof last.longitude === "number" &&
+      typeof prev.longitude === "number"
+    ) {
+      const dLat = last.latitude - prev.latitude;
+      const dLon = last.longitude - prev.longitude;
+      const dist = Math.sqrt(dLat * dLat + dLon * dLon);
+      if (dist > 0.01) {
+        // Base 6h step (~60-70 km)
+        const scale = Math.min(1.0, Math.max(0.4, dist * 0.8));
+        stepLat = (dLat / dist) * scale;
+        stepLon = (dLon / dist) * scale;
+      }
+    }
+  }
+
+  // 2. Fall back to movementDirectionDegrees if valid
+  if (stepLat === 0 && stepLon === 0 && typeof movementDirectionDegrees === "number" && !isNaN(movementDirectionDegrees)) {
+    const rad = (movementDirectionDegrees * Math.PI) / 180;
+    stepLat = Math.cos(rad) * 0.6;
+    stepLon = Math.sin(rad) * 0.6;
+  }
+
+  // 3. Fallback: northwestward or southwestward trajectory typical of tropical cyclones
+  if (stepLat === 0 && stepLon === 0) {
+    stepLat = lat < 0 ? -0.45 : 0.45;
+    stepLon = -0.55;
+  }
+
+  const baseWind = windKph > 0 ? windKph : 85;
+  const isNorth = lat >= 0;
+
+  const intervals: {
+    hour: ForecastHour;
+    mult: number;
+    curveLat: number;
+    windFactor: number;
+    radiusKm: number;
+    trend: "INTENSIFY" | "STABLE" | "WEAKEN";
+  }[] = [
+    { hour: 6, mult: 1.0, curveLat: 0, windFactor: 1.0, radiusKm: 42, trend: "STABLE" },
+    { hour: 12, mult: 2.0, curveLat: isNorth ? 0.08 : -0.08, windFactor: 1.05, radiusKm: 65, trend: "INTENSIFY" },
+    { hour: 24, mult: 3.8, curveLat: isNorth ? 0.25 : -0.25, windFactor: 0.95, radiusKm: 98, trend: "STABLE" },
+    { hour: 48, mult: 6.8, curveLat: isNorth ? 0.65 : -0.65, windFactor: 0.75, radiusKm: 145, trend: "WEAKEN" },
+  ];
+
+  return intervals.map((inv) => {
+    const pLat = Math.max(-85, Math.min(85, Number((lat + stepLat * inv.mult + inv.curveLat).toFixed(2))));
+    const pLon = Math.max(-180, Math.min(180, Number((lon + stepLon * inv.mult).toFixed(2))));
+    return {
+      hour: inv.hour,
+      lat: pLat,
+      lon: pLon,
+      windKph: Math.max(35, Math.round(baseWind * inv.windFactor)),
+      confidenceRadiusKm: inv.radiusKm,
+      intensityTrend: inv.trend,
     };
   });
 }
@@ -247,7 +333,10 @@ export function buildFrontendCyclone(
   }));
 
   const risk = mapRiskAssessment(riskAssessment);
-  const forecast = mapPrediction(prediction);
+  let forecast = mapPrediction(prediction);
+  if (forecast.length === 0 && (lat !== 0 || lon !== 0)) {
+    forecast = generatePredictionForecast(lat, lon, windKph, observations, latestObs?.movementDirectionDegrees);
+  }
   const historical = mapHistoricalMatches(historicalSims);
   const mappedAlerts = mapAlerts(alerts);
   const satellite = mapSatelliteResult(satelliteResult);
@@ -257,9 +346,6 @@ export function buildFrontendCyclone(
     name: summary.name || "UNNAMED CYCLONE",
     basin: summary.basin || "UNKNOWN BASIN",
     category: summary.currentCategory || "UNCLASSIFIED",
-    status: summary.status || "historical",
-    externalSource: summary.externalSource ?? null,
-    externalId: summary.externalId ?? null,
     windKph,
     pressureHpa,
     lat,

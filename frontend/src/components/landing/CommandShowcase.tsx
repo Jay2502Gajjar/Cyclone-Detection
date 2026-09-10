@@ -279,7 +279,7 @@ export function CommandShowcase() {
                 to="/dashboard"
                 className="inline-flex items-center gap-1.5 font-display text-xs font-semibold text-[#38BDF8] hover:text-[#60A5FA] transition-colors"
               >
-                <span>Launch Full Command Console</span>
+                <span>Go to Dashboard</span>
                 <ArrowUpRight className="h-3.5 w-3.5" />
               </Link>
             </div>

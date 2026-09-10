@@ -4,14 +4,15 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 import earthMap from "@/assets/earth-map.jpg";
+import starsBg from "@/assets/stars-bg.jpg";
 import { useCyclone } from "@/state/cyclone-store";
 import type { Cyclone } from "@/types/cyclone";
 
 const R = 1;
 
 function toVec(lat: number, lon: number, r = R): THREE.Vector3 {
-  const safeLat = typeof lat === "number" && !isNaN(lat) ? lat : 15.0;
-  const safeLon = typeof lon === "number" && !isNaN(lon) ? lon : 75.0;
+  const safeLat = typeof lat === "number" && !isNaN(lat) ? lat : 0;
+  const safeLon = typeof lon === "number" && !isNaN(lon) ? lon : 0;
   const phi = ((90 - safeLat) * Math.PI) / 180;
   const theta = ((safeLon + 180) * Math.PI) / 180;
   return new THREE.Vector3(
@@ -73,9 +74,8 @@ function EarthNullschoolCycloneVortex({ lat, lon, intensity }: { lat: number; lo
 
     const speedMultiplier = (intensity / 100) * 1.35;
 
-    for (let i = 0; i < count; i++) {
-      const p = particles[i];
-      if (!p) continue;
+    for (const p of particles) {
+      
       const dx = p.x - cx;
       const dy = p.y - cy;
       const dist = Math.max(8, Math.hypot(dx, dy));
@@ -241,21 +241,21 @@ function Earth() {
         <sphereGeometry args={[R, 64, 64]} />
         <meshStandardMaterial
           map={texture}
-          roughness={0.80}
-          metalness={0.05}
+          roughness={0.70}
+          metalness={0.12}
         />
       </mesh>
 
       {/* Subtle geographic grid lines */}
       <mesh>
         <sphereGeometry args={[R + 0.0012, 36, 36]} />
-        <meshBasicMaterial color="#94A3B8" wireframe transparent opacity={0.02} />
+        <meshBasicMaterial color="#94A3B8" wireframe transparent opacity={0.035} />
       </mesh>
 
       {/* Realistic atmospheric glow shell */}
       <mesh scale={1.025}>
         <sphereGeometry args={[R, 48, 48]} />
-        <meshBasicMaterial color="#38BDF8" transparent opacity={0.06} side={THREE.BackSide} />
+        <meshBasicMaterial color="#60A5FA" transparent opacity={0.08} side={THREE.BackSide} />
       </mesh>
     </>
   );
@@ -283,25 +283,27 @@ function Scene({ cyclone }: { cyclone: Cyclone }) {
   });
 
   const revealed = prediction.status === "idle" ? cyclone.forecast : cyclone.forecast.filter((f) => prediction.revealedHours.includes(f.hour));
-  const visibleForecast = layers.prediction ? revealed : [];
+  const forecastPoints = revealed;
+  const visibleForecast = layers.prediction ? forecastPoints : [];
 
   const histPoints = useMemo(
     () => cyclone.track.map((p) => toVec(p.lat, p.lon, R + 0.006).toArray() as [number, number, number]),
     [cyclone],
   );
   const forecastLine = useMemo(() => {
+    if (!layers.prediction || visibleForecast.length === 0) return [];
     const pts = [toVec(cyclone.lat, cyclone.lon, R + 0.006), ...visibleForecast.map((f) => toVec(f.lat, f.lon, R + 0.006))];
     return pts.map((p) => p.toArray() as [number, number, number]);
-  }, [cyclone, visibleForecast]);
+  }, [cyclone, visibleForecast, layers.prediction]);
 
   const compare = compareId ? cyclone.historical.find((h) => h.id === compareId) : null;
   const hasValidCoords = cyclone.lat !== 0 || cyclone.lon !== 0;
 
   return (
     <>
-      <ambientLight intensity={0.65} />
-      <directionalLight position={[4, 3, 5]} intensity={1.35} />
-      <directionalLight position={[-4, -2, -3]} intensity={0.25} />
+      <ambientLight intensity={1.3} />
+      <directionalLight position={[4, 3, 5]} intensity={1.5} />
+      <directionalLight position={[-4, -2, -3]} intensity={0.4} />
       <Earth />
 
       {/* Cambecc/earth Cyclone Streamline Vortex */}
@@ -319,22 +321,30 @@ function Scene({ cyclone }: { cyclone: Cyclone }) {
       ) : null}
 
       {/* Forecast Line */}
-      {forecastLine.length > 1 ? (
-        <Line points={forecastLine} color="#3B82F6" lineWidth={2} dashed dashSize={0.025} gapSize={0.015} />
+      {layers.prediction && forecastLine.length > 1 ? (
+        <Line points={forecastLine} color="#38BDF8" lineWidth={2} dashed dashSize={0.025} gapSize={0.015} />
       ) : null}
 
-      {/* Confidence corridor */}
-      {layers.corridor
-        ? visibleForecast.map((f) => (
-          <TangentCircle key={`c-${f.hour}`} lat={f.lat} lon={f.lon} radiusKm={f.confidenceRadiusKm} color="#38BDF8" opacity={0.07} />
-        ))
-        : null}
+      {/* Confidence corridor & Cyclone intensity circles */}
+      {layers.corridor && hasValidCoords ? (
+        <>
+          {/* Cyclone Center Intensity Circles */}
+          <TangentCircle lat={cyclone.lat} lon={cyclone.lon} radiusKm={45} color="#EF4444" opacity={0.15} />
+          <TangentCircle lat={cyclone.lat} lon={cyclone.lon} radiusKm={90} color="#0284C7" opacity={0.09} />
+          <TangentCircle lat={cyclone.lat} lon={cyclone.lon} radiusKm={150} color="#38BDF8" opacity={0.05} />
+
+          {/* Forecast Waypoint Uncertainty Corridor */}
+          {forecastPoints.map((f) => (
+            <TangentCircle key={`c-${f.hour}`} lat={f.lat} lon={f.lon} radiusKm={f.confidenceRadiusKm} color="#38BDF8" opacity={0.12} />
+          ))}
+        </>
+      ) : null}
 
       {/* Risk Zone */}
-      {layers.risk && visibleForecast.length > 0 ? (
+      {layers.risk && cyclone.risk.score > 0 && hasValidCoords ? (
         <TangentCircle
-          lat={visibleForecast[visibleForecast.length - 1]?.lat ?? cyclone.lat}
-          lon={visibleForecast[visibleForecast.length - 1]?.lon ?? cyclone.lon}
+          lat={cyclone.lat}
+          lon={cyclone.lon}
           radiusKm={cyclone.risk.score * 4.5}
           color={cyclone.risk.level === "LOW" ? "#10B981" : "#F43F5E"}
           opacity={0.10}
@@ -406,10 +416,16 @@ function Scene({ cyclone }: { cyclone: Cyclone }) {
 export default function Globe3D() {
   const { cyclone } = useCyclone();
   return (
-    <Canvas camera={{ position: [0, 0, 3.2], fov: 42 }} dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
-      <Suspense fallback={null}>
-        <Scene cyclone={cyclone} />
-      </Suspense>
-    </Canvas>
+    <div
+      className="relative h-full w-full overflow-hidden rounded-[18px] bg-black bg-cover bg-center bg-no-repeat select-none"
+      style={{ backgroundImage: `url(${starsBg})` }}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-radial from-transparent via-black/10 to-black/50" />
+      <Canvas camera={{ position: [0, 0, 3.2], fov: 42 }} dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
+        <Suspense fallback={null}>
+          <Scene cyclone={cyclone} />
+        </Suspense>
+      </Canvas>
+    </div>
   );
 }

@@ -1,0 +1,21 @@
+citation: M. Maskey et al., IEEE JSTARS 2020 (doi:10.1109/JSTARS.2020.3011907)
+classes:
+  cyclone: 209
+  non_cyclone: 111
+data_mode: real
+dataset_name: NASA Tropical Cyclone Wind Estimation Dataset
+downloaded_at: '2026-09-09T11:01:00.671096+00:00'
+image_spec:
+  channels: "1 (Grayscale Infrared / 10.7 \xB5m)"
+  dimensions: 366x366
+  format: JPEG
+license: CC-BY-4.0
+provider: NASA Interagency Implementation and Advanced Concepts Team (IMPACT)
+source_url: https://data.source.coop/nasa/tropical-storm-competition/
+splits:
+  test: 60
+  train: 200
+  validation: 60
+total_bytes: 6239456
+total_cyclones: 16
+total_images: 320

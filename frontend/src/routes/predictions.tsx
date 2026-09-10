@@ -10,9 +10,9 @@ import { IntensityChart } from "@/components/dashboard/Charts";
 export const Route = createFileRoute("/predictions")({
   head: () => ({
     meta: [
-      { title: "Forecast Predictions — CycloVision" },
+      { title: "Forecast Predictions — VAIYU" },
       { name: "description", content: "6 to 48 hour cyclone trajectory and intensity forecasts with confidence radii and landfall risk." },
-      { property: "og:title", content: "Forecast Predictions — CycloVision" },
+      { property: "og:title", content: "Forecast Predictions — VAIYU" },
       { property: "og:description", content: "Trajectory and intensity forecasts with confidence radii and landfall risk." },
     ],
   }),

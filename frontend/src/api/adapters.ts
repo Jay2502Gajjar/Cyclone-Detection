@@ -9,6 +9,7 @@ import type {
   BackendRiskAssessment,
   BackendSimilarityResult,
   Cyclone,
+  ForecastHour,
   ForecastPoint,
   HistoricalMatch,
   RiskAssessment,

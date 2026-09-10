@@ -8,9 +8,9 @@ import { useCyclone } from "@/state/cyclone-store";
 export const Route = createFileRoute("/alerts")({
   head: () => ({
     meta: [
-      { title: "Cyclone Alerts — CycloVision" },
+      { title: "Cyclone Alerts — VAIYU" },
       { name: "description", content: "Warnings, watches and advisories issued for the active cyclone, with a one-click situation report." },
-      { property: "og:title", content: "Cyclone Alerts — CycloVision" },
+      { property: "og:title", content: "Cyclone Alerts — VAIYU" },
       { property: "og:description", content: "Warnings, watches and advisories for the active cyclone." },
     ],
   }),

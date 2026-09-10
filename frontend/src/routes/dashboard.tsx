@@ -15,9 +15,9 @@ import { useCyclone } from "@/state/cyclone-store";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Command Console — CycloVision Intelligence" },
+      { title: "Command Console — VAIYU Intelligence" },
       { name: "description", content: "Live cyclone tracking, AI satellite analysis, forecast trajectories and landfall risk in one mission-control dashboard." },
-      { property: "og:title", content: "Command Console — CycloVision Intelligence" },
+      { property: "og:title", content: "Command Console — VAIYU Intelligence" },
       { property: "og:description", content: "Live cyclone tracking, AI satellite analysis, forecast trajectories and landfall risk." },
     ],
   }),

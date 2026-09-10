@@ -1,5 +1,5 @@
 /**
- * Centralized API Client for CycloVision Frontend.
+ * Centralized API Client for VAIYU Frontend.
  * Connects directly to the Spring Boot REST Backend.
  */
 

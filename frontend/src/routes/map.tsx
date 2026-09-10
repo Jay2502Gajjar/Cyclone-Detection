@@ -11,9 +11,9 @@ import { useCyclone } from "@/state/cyclone-store";
 export const Route = createFileRoute("/map")({
   head: () => ({
     meta: [
-      { title: "Live Cyclone Map — CycloVision" },
+      { title: "Live Cyclone Map — VAIYU" },
       { name: "description", content: "Interactive 2D and 3D cyclone map with wind particles, tracks, forecast corridor and risk zones." },
-      { property: "og:title", content: "Live Cyclone Map — CycloVision" },
+      { property: "og:title", content: "Live Cyclone Map — VAIYU" },
       { property: "og:description", content: "Interactive cyclone map with wind particles, tracks and risk zones." },
     ],
   }),

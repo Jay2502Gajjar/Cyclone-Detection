@@ -7,35 +7,35 @@ export function BenchmarkTable() {
       metric: "Inference Compute Run Time",
       legacy: "4.2 Hours (512 Cores)",
       blackbox: "15 Seconds (Unconstrained)",
-      cyclovision: "42 Seconds (Constrained Phys)",
+      vaiyu: "42 Seconds (Constrained Phys)",
       isHighlight: false,
     },
     {
       metric: "Convective Core Resolution",
       legacy: "9.0 Kilometers",
       blackbox: "NA (Spatial Blur)",
-      cyclovision: "375 Meters (Planetary)",
+      vaiyu: "375 Meters (Planetary)",
       isHighlight: true,
     },
     {
       metric: "Rapid Intensification (RI) Precision",
       legacy: "41.2% Success Rate",
       blackbox: "58.4% (Over-fits Calm)",
-      cyclovision: "94.8% Accuracy Catch",
+      vaiyu: "94.8% Accuracy Catch",
       isHighlight: true,
     },
     {
       metric: "Angular Momentum Conservation",
       legacy: "Guaranteed via Numerics",
       blackbox: "Unstable (Velocity Leaks)",
-      cyclovision: "Strictly Enforced Loss",
+      vaiyu: "Strictly Enforced Loss",
       isHighlight: false,
     },
     {
       metric: "Initial Ingest-to-Alert Time",
       legacy: "180 Minutes",
       blackbox: "45 Minutes",
-      cyclovision: "<2 Minutes (Continuous)",
+      vaiyu: "<2 Minutes (Continuous)",
       isHighlight: true,
     },
   ];
@@ -112,7 +112,7 @@ export function BenchmarkTable() {
                         {row.isHighlight && (
                           <CheckCircle2 className="h-4 w-4 text-[#38BDF8] shrink-0 drop-shadow-[0_0_8px_rgba(56,189,248,0.6)]" />
                         )}
-                        <span>{row.cyclovision}</span>
+                        <span>{row.vaiyu}</span>
                       </div>
                     </td>
                   </tr>

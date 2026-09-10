@@ -10,9 +10,9 @@ import { useCyclone } from "@/state/cyclone-store";
 export const Route = createFileRoute("/historical")({
   head: () => ({
     meta: [
-      { title: "Historical Analogs — CycloVision" },
+      { title: "Historical Analogs — VAIYU" },
       { name: "description", content: "Compare the active cyclone with historical storms and replay its track through the time machine." },
-      { property: "og:title", content: "Historical Analogs — CycloVision" },
+      { property: "og:title", content: "Historical Analogs — VAIYU" },
       { property: "og:description", content: "Compare with historical storms and replay tracks through the time machine." },
     ],
   }),

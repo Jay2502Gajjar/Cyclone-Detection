@@ -9,9 +9,9 @@ import { IntensityChart, ConfidenceChart } from "@/components/dashboard/Charts";
 export const Route = createFileRoute("/ai")({
   head: () => ({
     meta: [
-      { title: "AI Analysis — CycloVision" },
+      { title: "AI Analysis — VAIYU" },
       { name: "description", content: "Satellite cyclone detection, Grad-CAM heatmaps, model confidence and feature importance." },
-      { property: "og:title", content: "AI Analysis — CycloVision" },
+      { property: "og:title", content: "AI Analysis — VAIYU" },
       { property: "og:description", content: "Satellite detection, Grad-CAM heatmaps and explainable model drivers." },
     ],
   }),

@@ -154,7 +154,7 @@ function EarthNullschoolPinpoint({ lat, lon }: { lat: number; lon: number }) {
 
   useFrame(() => {
     const t = performance.now() / 1000;
-    
+
     // Smooth expanding sonar waves
     if (sonarRef.current) {
       const phase1 = (t % 1.6) / 1.6;

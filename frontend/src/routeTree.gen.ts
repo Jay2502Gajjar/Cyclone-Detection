@@ -14,6 +14,7 @@ import { Route as AiRouteImport } from './routes/ai'
 import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as HistoricalRouteImport } from './routes/historical'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 
@@ -42,6 +43,11 @@ const HistoricalRoute = HistoricalRouteImport.update({
   path: '/historical',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MapRoute = MapRouteImport.update({
   id: '/map',
   path: '/map',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AlertsRoute
   '/dashboard': typeof DashboardRoute
   '/historical': typeof HistoricalRoute
+  '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/alerts': typeof AlertsRoute
   '/dashboard': typeof DashboardRoute
   '/historical': typeof HistoricalRoute
+  '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/alerts': typeof AlertsRoute
   '/dashboard': typeof DashboardRoute
   '/historical': typeof HistoricalRoute
+  '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/dashboard'
     | '/historical'
+    | '/login'
     | '/map'
     | '/predictions'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/dashboard'
     | '/historical'
+    | '/login'
     | '/map'
     | '/predictions'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/dashboard'
     | '/historical'
+    | '/login'
     | '/map'
     | '/predictions'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   AlertsRoute: typeof AlertsRoute
   DashboardRoute: typeof DashboardRoute
   HistoricalRoute: typeof HistoricalRoute
+  LoginRoute: typeof LoginRoute
   MapRoute: typeof MapRoute
   PredictionsRoute: typeof PredictionsRoute
 }
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoricalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/map': {
       id: '/map'
       path: '/map'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   AlertsRoute: AlertsRoute,
   DashboardRoute: DashboardRoute,
   HistoricalRoute: HistoricalRoute,
+  LoginRoute: LoginRoute,
   MapRoute: MapRoute,
   PredictionsRoute: PredictionsRoute,
 }

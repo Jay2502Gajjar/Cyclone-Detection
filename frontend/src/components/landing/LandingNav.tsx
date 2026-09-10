@@ -36,6 +36,12 @@ export function LandingNav({ onRequestAccess }: LandingNavProps) {
         {/* Right CTA Actions */}
         <div className="flex items-center gap-3">
           <Link
+            to="/login"
+            className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 text-[13px] font-medium tracking-wide text-[#94A3B8] backdrop-blur-xl transition-all hover:border-[#38BDF8]/40 hover:bg-white/[0.08] hover:text-white"
+          >
+            Sign In
+          </Link>
+          <Link
             to="/dashboard"
             className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 text-[13px] font-medium tracking-wide text-[#94A3B8] backdrop-blur-xl transition-all hover:border-[#38BDF8]/40 hover:bg-white/[0.08] hover:text-white"
           >

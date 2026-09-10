@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 import earthMap from "@/assets/earth-map.jpg";
+import starsBg from "@/assets/stars-bg.jpg";
 import { useCyclone } from "@/state/cyclone-store";
 import type { Cyclone } from "@/types/cyclone";
 
@@ -405,10 +406,16 @@ function Scene({ cyclone }: { cyclone: Cyclone }) {
 export default function Globe3D() {
   const { cyclone } = useCyclone();
   return (
-    <Canvas camera={{ position: [0, 0, 3.2], fov: 42 }} dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
-      <Suspense fallback={null}>
-        <Scene cyclone={cyclone} />
-      </Suspense>
-    </Canvas>
+    <div
+      className="relative h-full w-full overflow-hidden rounded-[18px] bg-black bg-cover bg-center bg-no-repeat select-none"
+      style={{ backgroundImage: `url(${starsBg})` }}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-radial from-transparent via-black/10 to-black/50" />
+      <Canvas camera={{ position: [0, 0, 3.2], fov: 42 }} dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
+        <Suspense fallback={null}>
+          <Scene cyclone={cyclone} />
+        </Suspense>
+      </Canvas>
+    </div>
   );
 }

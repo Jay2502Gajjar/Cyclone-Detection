@@ -1,9 +1,15 @@
 import "leaflet/dist/leaflet.css";
 import { Circle, CircleMarker, MapContainer, Polyline, Popup, TileLayer, useMap } from "react-leaflet";
+import type { LatLngBoundsExpression } from "leaflet";
 import { useEffect } from "react";
 
 import { useCyclone } from "@/state/cyclone-store";
 import { WindParticleCanvas } from "./WindParticleCanvas";
+
+const WORLD_BOUNDS: LatLngBoundsExpression = [
+  [-85.051128, -180],
+  [85.051128, 180],
+];
 
 function Recenter({ lat, lon }: { lat: number; lon: number }) {
   const map = useMap();
@@ -41,23 +47,39 @@ export default function CycloneMap() {
   const mapLat = hasCoords ? cyclone.lat : 16.0;
   const mapLon = hasCoords ? cyclone.lon : 78.0;
 
+  const validTrack = cyclone.track.filter(
+    (p) => typeof p.lat === "number" && typeof p.lon === "number" && (p.lat !== 0 || p.lon !== 0)
+  );
+
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[18px]">
-      <MapContainer center={[mapLat, mapLon]} zoom={5} className="h-full w-full" zoomControl={false}>
+    <div className="relative h-full w-full overflow-hidden rounded-[18px] bg-[#080C14]">
+      <MapContainer
+        center={[mapLat, mapLon]}
+        zoom={5}
+        minZoom={3}
+        maxZoom={18}
+        maxBounds={WORLD_BOUNDS}
+        maxBoundsViscosity={1.0}
+        className="h-full w-full bg-[#080C14]"
+        zoomControl={false}
+      >
         <MapResizer />
 
-        {/* Photorealistic Satellite Earth Imagery */}
+        {/* Photorealistic Single Earth Imagery Tile Layer */}
         <TileLayer
           attribution="Esri World Imagery"
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           maxZoom={18}
+          minZoom={3}
+          bounds={WORLD_BOUNDS}
+          noWrap={true}
         />
 
         <Recenter lat={mapLat} lon={mapLon} />
 
         {/* Historical Past Path */}
-        {layers.history && cyclone.track.length > 1 ? (
-          <Polyline positions={cyclone.track.map((p) => [p.lat, p.lon] as [number, number])} pathOptions={{ color: "#CBD5E1", weight: 2 }} />
+        {layers.history && validTrack.length > 1 ? (
+          <Polyline positions={validTrack.map((p) => [p.lat, p.lon] as [number, number])} pathOptions={{ color: "#CBD5E1", weight: 2 }} />
         ) : null}
 
         {/* Forecast Trajectory Line */}
@@ -146,9 +168,12 @@ export default function CycloneMap() {
             </Popup>
           </CircleMarker>
         ) : null}
-      </MapContainer>
 
-      {layers.wind && cyclone.windKph > 0 ? <WindParticleCanvas speed={cyclone.windKph / 120} /> : null}
+        {/* Wind Vortex Streamlines anchored to storm center */}
+        {layers.wind && hasCoords && (cyclone.windKph > 0 || cyclone.lat !== 0) ? (
+          <WindParticleCanvas lat={cyclone.lat} lon={cyclone.lon} speed={Math.max(0.6, cyclone.windKph / 120)} />
+        ) : null}
+      </MapContainer>
     </div>
   );
 }

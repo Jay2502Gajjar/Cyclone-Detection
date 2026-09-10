@@ -72,6 +72,7 @@ export interface Explainability {
 export interface Cyclone {
   id: string;
   name: string;
+  isNamed?: boolean;
   basin: string;
   category: string;
   windKph: number;

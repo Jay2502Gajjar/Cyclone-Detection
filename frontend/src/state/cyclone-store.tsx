@@ -20,7 +20,7 @@ import { DEMO_CYCLONES } from "@/data/demo";
 import type { Cyclone, ForecastPoint, SatelliteAnalysis } from "@/types/cyclone";
 
 export type ViewMode = "3D" | "2D";
-export type LayerKey = "wind" | "history" | "prediction" | "corridor" | "risk" | "satellite";
+export type LayerKey = "wind" | "history" | "prediction" | "corridor" | "risk";
 export type PanelKey = "risk" | "historical" | "report" | "alerts" | "whatif" | null;
 
 interface SatelliteState {
@@ -80,7 +80,6 @@ const defaultLayers: Record<LayerKey, boolean> = {
   prediction: true,
   corridor: true,
   risk: true,
-  satellite: false,
 };
 
 const EMPTY_FALLBACK_CYCLONE: Cyclone = {

@@ -36,13 +36,44 @@ public class IbtracsDataProvider implements CycloneDataProvider {
         return "IBTrACS";
     }
 
+    private static final Map<String, Integer> CATEGORY_RANK = Map.of(
+        "Unknown", 0,
+        "Depression", 1,
+        "Deep Depression", 2,
+        "Cyclonic Storm", 3,
+        "Severe Cyclonic Storm", 4,
+        "Very Severe Cyclonic Storm", 5,
+        "Extremely Severe Cyclonic Storm", 6,
+        "Super Cyclonic Storm", 7
+    );
+
+    private InputStream getResourceStream(String filename) throws Exception {
+        ClassPathResource res = new ClassPathResource("data/" + filename);
+        if (res.exists()) {
+            return res.getInputStream();
+        }
+        res = new ClassPathResource("data/ibtracs/" + filename);
+        if (res.exists()) {
+            return res.getInputStream();
+        }
+        java.io.File file = new java.io.File("backend/data/ibtracs/" + filename);
+        if (file.exists()) {
+            return new java.io.FileInputStream(file);
+        }
+        file = new java.io.File("data/ibtracs/" + filename);
+        if (file.exists()) {
+            return new java.io.FileInputStream(file);
+        }
+        throw new java.io.FileNotFoundException("Could not locate IBTrACS data file: " + filename);
+    }
+
     private synchronized void ensureLoaded() {
         if (loaded) return;
         try {
-            logger.info("Loading IBTrACS dataset into memory...");
+            logger.info("Loading NOAA IBTrACS dataset into memory...");
             
-            // Load Cyclones
-            try (InputStream is = new ClassPathResource("data/cyclones.json").getInputStream()) {
+            // 1. Load Cyclones
+            try (InputStream is = getResourceStream("cyclones.json")) {
                 JsonNode root = objectMapper.readTree(is);
                 for (JsonNode node : root) {
                     ExternalCycloneDto dto = new ExternalCycloneDto();
@@ -51,14 +82,15 @@ public class IbtracsDataProvider implements CycloneDataProvider {
                     dto.setName(node.path("name").asText());
                     dto.setBasin(node.path("basin").asText());
                     dto.setStatus(node.path("status").asText());
-                    // Note: 'season_year' is excluded to avoid schema changes.
-                    // 'currentCategory' is left null as there isn't a direct equivalent in the JSON cyclone object.
                     cachedCyclones.add(dto);
                 }
             }
 
-            // Load Observations
-            try (InputStream is = new ClassPathResource("data/observations.json").getInputStream()) {
+            // 2. Load Observations & compute peak intensity category per cyclone
+            Map<String, String> peakCategoryMap = new HashMap<>();
+            Map<String, Integer> peakRankMap = new HashMap<>();
+
+            try (InputStream is = getResourceStream("observations.json")) {
                 JsonNode root = objectMapper.readTree(is);
                 for (JsonNode node : root) {
                     ExternalObservationDto dto = new ExternalObservationDto();
@@ -88,15 +120,32 @@ public class IbtracsDataProvider implements CycloneDataProvider {
                     }
                     
                     dto.setSource(getProviderName());
-                    // Creating a stable sourceRecordId from cyclone_id and timestamp
                     dto.setSourceRecordId(cycloneId + "-" + observedAtStr);
                     
                     observationsMap.computeIfAbsent(cycloneId, k -> new ArrayList<>()).add(dto);
+
+                    if (!node.path("intensity_category").isNull()) {
+                        String category = node.path("intensity_category").asText();
+                        int rank = CATEGORY_RANK.getOrDefault(category, 0);
+                        int currentPeak = peakRankMap.getOrDefault(cycloneId, -1);
+                        if (rank > currentPeak) {
+                            peakRankMap.put(cycloneId, rank);
+                            peakCategoryMap.put(cycloneId, category);
+                        }
+                    }
+                }
+            }
+
+            // 3. Assign peak intensity category to each cyclone
+            for (ExternalCycloneDto cyclone : cachedCyclones) {
+                String peakCat = peakCategoryMap.get(cyclone.getExternalId());
+                if (peakCat != null && !peakCat.isBlank()) {
+                    cyclone.setCurrentCategory(peakCat);
                 }
             }
             
             loaded = true;
-            logger.info("Loaded {} cyclones and {} observations from IBTrACS", 
+            logger.info("Successfully loaded {} cyclones and {} observations from NOAA IBTrACS", 
                 cachedCyclones.size(), 
                 observationsMap.values().stream().mapToInt(List::size).sum());
                 

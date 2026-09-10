@@ -25,4 +25,24 @@ public class HistoricalCyclone {
 
     private Double maxWindSpeedKmh;
     private Double minPressureHpa;
+
+    public Integer getYear() {
+        return seasonYear;
+    }
+
+    public Double getMaxWindKph() {
+        return maxWindSpeedKmh;
+    }
+
+    public String getLandfallLocation() {
+        return finalLandfallLocation;
+    }
+
+    public String getTrackJson() {
+        return "[]";
+    }
+
+    public Integer getCasualties() {
+        return 0;
+    }
 }

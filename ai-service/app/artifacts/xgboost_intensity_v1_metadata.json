@@ -1,0 +1,148 @@
+{
+  "model_name": "XGBoost-Intensity-v1.0",
+  "model_type": "xgboost.XGBRegressor",
+  "target_description": "Future maximum sustained surface wind speed in knots at horizon ~24h",
+  "target_horizon_hours": 24.0,
+  "feature_count": 14,
+  "feature_names": [
+    "latitude",
+    "longitude",
+    "current_wind_kts",
+    "current_pressure_hpa",
+    "pressure_available",
+    "translation_speed_kmh",
+    "translation_heading_deg",
+    "coriolis_param",
+    "lag_6h_wind_change_kts",
+    "lag_6h_available",
+    "lag_6h_lat_change",
+    "lag_6h_lon_change",
+    "lag_12h_wind_change_kts",
+    "season_month"
+  ],
+  "best_iteration": 110,
+  "hyperparameters": {
+    "n_estimators": 250,
+    "max_depth": 5,
+    "learning_rate": 0.04,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 4,
+    "gamma": 0.5,
+    "objective": "reg:squarederror",
+    "random_state": 42
+  },
+  "dataset_split": {
+    "train_seasons": "<= 2013",
+    "val_seasons": "2014 - 2018",
+    "test_seasons": ">= 2019",
+    "train_samples": 3539,
+    "val_samples": 949,
+    "test_samples": 1428
+  },
+  "metrics": {
+    "train": {
+      "mae": 7.033,
+      "rmse": 9.8865,
+      "r2": 0.8267,
+      "mean_bias": -0.0101
+    },
+    "validation": {
+      "mae": 10.8721,
+      "rmse": 15.6143,
+      "r2": 0.4976,
+      "mean_bias": 0.5575
+    },
+    "test": {
+      "mae": 10.2873,
+      "rmse": 13.9397,
+      "r2": 0.6903,
+      "mean_bias": -0.0798
+    }
+  },
+  "intensity_regimes_test": {
+    "< 34 kt (Depression)": {
+      "mae": 7.9582,
+      "rmse": 10.7447,
+      "r2": -6.9439,
+      "mean_bias": 7.3214,
+      "sample_count": 648,
+      "actual_mean": 26.03,
+      "predicted_mean": 33.35,
+      "reliability": "Statistically sufficient"
+    },
+    "34-63 kt (Gale / Storm)": {
+      "mae": 9.1397,
+      "rmse": 11.7351,
+      "r2": -0.8828,
+      "mean_bias": -0.9889,
+      "sample_count": 462,
+      "actual_mean": 46.12,
+      "predicted_mean": 45.14,
+      "reliability": "Statistically sufficient"
+    },
+    "64-95 kt (Hurricane / Very Severe)": {
+      "mae": 14.1269,
+      "rmse": 17.4664,
+      "r2": -2.29,
+      "mean_bias": -10.4477,
+      "sample_count": 243,
+      "actual_mean": 77.16,
+      "predicted_mean": 66.71,
+      "reliability": "Statistically sufficient"
+    },
+    "> 95 kt (Extremely Severe / Super)": {
+      "mae": 25.0396,
+      "rmse": 29.4202,
+      "r2": -6.5431,
+      "mean_bias": -24.8354,
+      "sample_count": 75,
+      "actual_mean": 112.07,
+      "predicted_mean": 87.23,
+      "reliability": "Statistically sufficient"
+    }
+  },
+  "rapid_intensification_test": {
+    "mae": 29.8232,
+    "rmse": 31.8015,
+    "r2": -1.3314,
+    "mean_bias": -29.8232,
+    "sample_count": 82,
+    "actual_mean_delta": 38.36,
+    "predicted_mean_delta": 8.54,
+    "underprediction_bias": -29.82
+  },
+  "feature_importance_gain": {
+    "latitude": 2385.4753,
+    "longitude": 3549.9944,
+    "current_wind_kts": 24612.0762,
+    "current_pressure_hpa": 4024.9233,
+    "pressure_available": 1361.0669,
+    "translation_speed_kmh": 963.5452,
+    "translation_heading_deg": 1580.7622,
+    "coriolis_param": 3013.3342,
+    "lag_6h_wind_change_kts": 3346.7441,
+    "lag_6h_available": 1723.5282,
+    "lag_6h_lat_change": 2275.3245,
+    "lag_6h_lon_change": 1214.6716,
+    "lag_12h_wind_change_kts": 5526.5386,
+    "season_month": 2030.8785
+  },
+  "prediction_ranges": {
+    "test_actual": {
+      "min": 19.979999542236328,
+      "max": 130.02000427246094,
+      "mean": 45.75092315673828
+    },
+    "test_predicted": {
+      "min": 21.122156143188477,
+      "max": 111.92156982421875,
+      "mean": 45.671077728271484
+    }
+  },
+  "scientific_notes": [
+    "Model is an empirical statistical baseline trained strictly on real historical IBTrACS telemetry.",
+    "Feature importance reflects gradient-split information gain within this tree ensemble, not physical causality.",
+    "No synthetic data, environmental fabrication, or test-set leakage occurred during training or validation."
+  ]
+}

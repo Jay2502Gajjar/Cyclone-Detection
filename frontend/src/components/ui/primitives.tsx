@@ -47,15 +47,16 @@ export function Btn({ className, variant = "outline", size = "md", ...rest }: Bt
   );
 }
 
-export function Pill({ children, tone = "muted" }: { children: ReactNode; tone?: "muted" | "amber" | "danger" | "ink" }) {
+export function Pill({ children, tone = "muted" }: { children: ReactNode; tone?: "muted" | "amber" | "danger" | "ink" | "nominal" }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-display text-[10px] uppercase tracking-[0.16em]",
-        tone === "muted" && "bg-secondary text-secondary-foreground",
-        tone === "amber" && "bg-amber/20 text-clay",
-        tone === "danger" && "bg-destructive/15 text-destructive",
-        tone === "ink" && "bg-primary text-primary-foreground",
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-display text-[10px] uppercase tracking-[0.16em] border",
+        tone === "muted" && "bg-[#1E293B] border-[#94A3B8]/30 text-[#F8FAFC]",
+        tone === "amber" && "bg-[#1E293B] border-[#3B82F6]/40 text-[#3B82F6]",
+        tone === "nominal" && "bg-[#10B981]/15 border-[#10B981]/40 text-[#10B981]",
+        tone === "danger" && "bg-[#EF4444]/15 border-[#EF4444]/40 text-[#EF4444]",
+        tone === "ink" && "bg-primary border-primary text-primary-foreground",
       )}
     >
       {children}
@@ -70,11 +71,11 @@ export function Toggle({ checked, onChange, label }: { checked: boolean; onChang
       className="flex w-full items-center justify-between gap-3 py-1.5 text-left"
       aria-pressed={checked}
     >
-      <span className="text-xs text-foreground/80">{label}</span>
+      <span className="text-xs text-foreground/90">{label}</span>
       <span
         className={cn(
-          "flex h-4 w-4 items-center justify-center rounded-[5px] border text-[9px]",
-          checked ? "border-clay bg-clay text-primary-foreground" : "border-border",
+          "flex h-4 w-4 items-center justify-center rounded-[5px] border text-[9px] transition-colors",
+          checked ? "border-primary bg-primary text-primary-foreground" : "border-border bg-[#161922]",
         )}
       >
         {checked ? "✓" : ""}
@@ -85,9 +86,9 @@ export function Toggle({ checked, onChange, label }: { checked: boolean; onChang
 
 export function Bar({ value, tone = "amber" }: { value: number; tone?: "amber" | "ink" }) {
   return (
-    <div className="h-1 w-full overflow-hidden rounded-full bg-secondary">
+    <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#161922] border border-[#262B36]">
       <div
-        className={cn("h-full rounded-full", tone === "amber" ? "bg-amber" : "bg-primary")}
+        className={cn("h-full rounded-full transition-all duration-300", tone === "amber" ? "bg-primary" : "bg-primary")}
         style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
       />
     </div>

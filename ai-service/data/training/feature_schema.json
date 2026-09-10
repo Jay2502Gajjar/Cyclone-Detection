@@ -1,0 +1,189 @@
+{
+  "dataset": "IBTrACS_NorthIndianOcean_Intensity",
+  "forecast_horizon_hours": 24.0,
+  "feature_count": 14,
+  "features": [
+    {
+      "name": "latitude",
+      "unit": "degrees",
+      "type": "float32",
+      "description": "Storm center latitude (-90 to 90)",
+      "train_stats": {
+        "index": 0,
+        "min": 1.899999976158142,
+        "max": 73.0,
+        "mean": 16.2574,
+        "std": 7.2157
+      }
+    },
+    {
+      "name": "longitude",
+      "unit": "degrees",
+      "type": "float32",
+      "description": "Storm center longitude (-180 to 180)",
+      "train_stats": {
+        "index": 1,
+        "min": -87.69999694824219,
+        "max": 143.60000610351562,
+        "mean": 76.953,
+        "std": 37.8591
+      }
+    },
+    {
+      "name": "current_wind_kts",
+      "unit": "knots",
+      "type": "float32",
+      "description": "Maximum sustained surface wind at time t",
+      "train_stats": {
+        "index": 2,
+        "min": 3.0199999809265137,
+        "max": 140.00999450683594,
+        "mean": 43.3663,
+        "std": 22.0989
+      }
+    },
+    {
+      "name": "current_pressure_hpa",
+      "unit": "hPa",
+      "type": "float32",
+      "description": "Central pressure at time t (1010.0 if missing)",
+      "train_stats": {
+        "index": 3,
+        "min": 890.0,
+        "max": 1011.0,
+        "mean": 992.7858,
+        "std": 16.2558
+      }
+    },
+    {
+      "name": "pressure_available",
+      "unit": "binary_flag",
+      "type": "float32",
+      "description": "1.0 if central pressure was recorded, 0.0 if imputed",
+      "train_stats": {
+        "index": 4,
+        "min": 0.0,
+        "max": 1.0,
+        "mean": 0.8751,
+        "std": 0.3306
+      }
+    },
+    {
+      "name": "translation_speed_kmh",
+      "unit": "km/h",
+      "type": "float32",
+      "description": "Forward movement speed derived from prior observation",
+      "train_stats": {
+        "index": 5,
+        "min": 0.0,
+        "max": 100.0999984741211,
+        "mean": 14.3224,
+        "std": 11.0508
+      }
+    },
+    {
+      "name": "translation_heading_deg",
+      "unit": "degrees",
+      "type": "float32",
+      "description": "Forward movement direction from true North (0 to 360)",
+      "train_stats": {
+        "index": 6,
+        "min": 0.0,
+        "max": 353.0,
+        "mean": 193.2128,
+        "std": 130.8082
+      }
+    },
+    {
+      "name": "coriolis_param",
+      "unit": "s^-1",
+      "type": "float32",
+      "description": "Planetary vorticity (2 * Omega * sin(latitude))",
+      "train_stats": {
+        "index": 7,
+        "min": 4.835428171645617e-06,
+        "max": 0.000139469702844508,
+        "mean": 0.0,
+        "std": 0.0
+      }
+    },
+    {
+      "name": "lag_6h_wind_change_kts",
+      "unit": "knots",
+      "type": "float32",
+      "description": "Rate of wind speed change over prior 6 hours (V_t - V_t-6h)",
+      "train_stats": {
+        "index": 8,
+        "min": -34.9900016784668,
+        "max": 30.020000457763672,
+        "mean": 1.1431,
+        "std": 5.0574
+      }
+    },
+    {
+      "name": "lag_6h_available",
+      "unit": "binary_flag",
+      "type": "float32",
+      "description": "1.0 if historical 6h observation exists, 0.0 if missing",
+      "train_stats": {
+        "index": 9,
+        "min": 0.0,
+        "max": 1.0,
+        "mean": 0.7618,
+        "std": 0.426
+      }
+    },
+    {
+      "name": "lag_6h_lat_change",
+      "unit": "degrees",
+      "type": "float32",
+      "description": "Meridional displacement over prior 6 hours (lat_t - lat_t-6h)",
+      "train_stats": {
+        "index": 10,
+        "min": -2.0,
+        "max": 4.699999809265137,
+        "mean": 0.268,
+        "std": 0.4395
+      }
+    },
+    {
+      "name": "lag_6h_lon_change",
+      "unit": "degrees",
+      "type": "float32",
+      "description": "Zonal displacement over prior 6 hours (lon_t - lon_t-6h)",
+      "train_stats": {
+        "index": 11,
+        "min": -2.5,
+        "max": 8.0,
+        "mean": -0.2238,
+        "std": 0.7767
+      }
+    },
+    {
+      "name": "lag_12h_wind_change_kts",
+      "unit": "knots",
+      "type": "float32",
+      "description": "Rate of wind speed change over prior 12 hours (V_t - V_t-12h)",
+      "train_stats": {
+        "index": 12,
+        "min": -59.9900016784668,
+        "max": 50.0,
+        "mean": 2.0499,
+        "std": 7.9068
+      }
+    },
+    {
+      "name": "season_month",
+      "unit": "month_number",
+      "type": "float32",
+      "description": "Calendar month of observation (1 to 12) for seasonal climatology",
+      "train_stats": {
+        "index": 13,
+        "min": 1.0,
+        "max": 12.0,
+        "mean": 8.7109,
+        "std": 2.5873
+      }
+    }
+  ]
+}

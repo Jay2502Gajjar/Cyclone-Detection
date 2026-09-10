@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { AppShell } from "@/components/layout/AppShell";
@@ -5,6 +6,7 @@ import { StageView } from "@/components/dashboard/StageView";
 import { LayersControl } from "@/components/dashboard/LayersControl";
 import { ActiveCyclones } from "@/components/dashboard/ActiveCyclones";
 import { LeftMetrics } from "@/components/dashboard/MetricCards";
+import { useCyclone } from "@/state/cyclone-store";
 
 export const Route = createFileRoute("/map")({
   head: () => ({
@@ -19,6 +21,12 @@ export const Route = createFileRoute("/map")({
 });
 
 function MapPage() {
+  const { setView } = useCyclone();
+
+  useEffect(() => {
+    setView("2D");
+  }, [setView]);
+
   return (
     <AppShell>
       <div className="grid gap-3 lg:grid-cols-[300px_minmax(0,1fr)]">

@@ -13,8 +13,24 @@ function Recenter({ lat, lon }: { lat: number; lon: number }) {
   return null;
 }
 
+function MapResizer() {
+  const map = useMap();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      map.invalidateSize();
+    }, 150);
+    const handleResize = () => map.invalidateSize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [map]);
+  return null;
+}
+
 export default function CycloneMap() {
-  const { cyclone, layers, prediction, compareId, setFocusHour } = useCyclone();
+  const { cyclone, layers, prediction, compareId, setFocusHour, focusHour } = useCyclone();
 
   const revealed =
     prediction.status === "idle" ? cyclone.forecast : cyclone.forecast.filter((f) => prediction.revealedHours.includes(f.hour));
@@ -28,93 +44,105 @@ export default function CycloneMap() {
   return (
     <div className="relative h-full w-full overflow-hidden rounded-[18px]">
       <MapContainer center={[mapLat, mapLon]} zoom={5} className="h-full w-full" zoomControl={false}>
-        {layers.satellite ? (
-          <TileLayer
-            attribution="Esri"
-            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-          />
-        ) : (
-          <TileLayer
-            attribution="&copy; CARTO"
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          />
-        )}
+        <MapResizer />
+
+        {/* Photorealistic Satellite Earth Imagery */}
+        <TileLayer
+          attribution="Esri World Imagery"
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          maxZoom={18}
+        />
 
         <Recenter lat={mapLat} lon={mapLon} />
 
+        {/* Historical Past Path */}
         {layers.history && cyclone.track.length > 1 ? (
-          <Polyline positions={cyclone.track.map((p) => [p.lat, p.lon] as [number, number])} pathOptions={{ color: "#e8c79a", weight: 2 }} />
+          <Polyline positions={cyclone.track.map((p) => [p.lat, p.lon] as [number, number])} pathOptions={{ color: "#CBD5E1", weight: 2 }} />
         ) : null}
 
+        {/* Forecast Trajectory Line */}
         {forecast.length > 0 && hasCoords ? (
           <Polyline
             positions={[[cyclone.lat, cyclone.lon], ...forecast.map((f) => [f.lat, f.lon] as [number, number])]}
-            pathOptions={{ color: "#e08a44", weight: 2, dashArray: "6 8" }}
+            pathOptions={{ color: "#38BDF8", weight: 2.5, dashArray: "5 7" }}
           />
         ) : null}
 
+        {/* Uncertainty Confidence Corridor */}
         {layers.corridor
           ? forecast.map((f) => (
-              <Circle
-                key={`cor-${f.hour}`}
-                center={[f.lat, f.lon]}
-                radius={f.confidenceRadiusKm * 1000}
-                pathOptions={{ color: "#e08a44", weight: 1, fillOpacity: 0.08 }}
-              />
-            ))
+            <Circle
+              key={`cor-${f.hour}`}
+              center={[f.lat, f.lon]}
+              radius={f.confidenceRadiusKm * 1000}
+              pathOptions={{ color: "#38BDF8", weight: 1, fillOpacity: 0.08 }}
+            />
+          ))
           : null}
 
+        {/* Risk Zone Impact Circle */}
         {layers.risk && cyclone.risk.score > 0 && hasCoords ? (
           <Circle
             center={[
               cyclone.forecast[cyclone.forecast.length - 1]?.lat ?? cyclone.lat,
               cyclone.forecast[cyclone.forecast.length - 1]?.lon ?? cyclone.lon,
             ]}
-            radius={cyclone.risk.score * 6000}
-            pathOptions={{ color: cyclone.risk.level === "LOW" ? "#8aa06a" : "#c74a34", weight: 1, fillOpacity: 0.12 }}
+            radius={cyclone.risk.score * 5000}
+            pathOptions={{ color: cyclone.risk.level === "LOW" ? "#10B981" : "#EF4444", weight: 1, fillOpacity: 0.12 }}
           />
         ) : null}
 
+        {/* Historical Compare Storm */}
         {compare && compare.track.length > 0 ? (
           <Polyline
             positions={compare.track.map((p) => [p.lat, p.lon] as [number, number])}
-            pathOptions={{ color: "#b79a7a", weight: 2, dashArray: "3 6" }}
+            pathOptions={{ color: "#F59E0B", weight: 1.8, dashArray: "3 6" }}
           />
         ) : null}
 
-        {forecast.map((f) => (
-          <CircleMarker
-            key={f.hour}
-            center={[f.lat, f.lon]}
-            radius={6}
-            pathOptions={{ color: "#f2e5d3", fillColor: "#e08a44", fillOpacity: 1, weight: 1 }}
-            eventHandlers={{ click: () => setFocusHour(f.hour) }}
-          >
-            <Popup>
-              <div className="font-display text-[11px] uppercase tracking-[0.14em]">+{f.hour} hours</div>
-              <div className="mt-1 text-[12px]">
-                {f.lat.toFixed(1)}°N {f.lon.toFixed(1)}°E
-              </div>
-              <div className="text-[12px] opacity-70">Confidence ±{f.confidenceRadiusKm} km</div>
-              <div className="text-[12px] opacity-70">
-                {f.windKph > 0 ? `${f.windKph} km/h` : "Pending"} · {f.intensityTrend}
-              </div>
-            </Popup>
-          </CircleMarker>
-        ))}
+        {/* Minimalist Forecast Waypoint Nodes */}
+        {forecast.map((f) => {
+          const isFocused = focusHour === f.hour;
+          return (
+            <CircleMarker
+              key={f.hour}
+              center={[f.lat, f.lon]}
+              radius={isFocused ? 6 : 4}
+              pathOptions={{
+                color: isFocused ? "#FFFFFF" : "#38BDF8",
+                fillColor: isFocused ? "#0284C7" : "#0F172A",
+                fillOpacity: 0.95,
+                weight: isFocused ? 2 : 1.5,
+              }}
+              eventHandlers={{ click: () => setFocusHour(isFocused ? null : f.hour) }}
+            >
+              <Popup>
+                <div className="font-display text-[11px] font-semibold uppercase tracking-wider text-primary">+{f.hour}H Telemetry</div>
+                <div className="mt-1 font-mono text-[12px] text-foreground">
+                  {f.lat.toFixed(1)}°N {f.lon.toFixed(1)}°E
+                </div>
+                <div className="text-[11px] text-muted-foreground">Confidence: ±{f.confidenceRadiusKm} km</div>
+                <div className="text-[11px] text-muted-foreground">
+                  {f.windKph > 0 ? `${f.windKph} km/h` : "Pending"} · {f.intensityTrend}
+                </div>
+              </Popup>
+            </CircleMarker>
+          );
+        })}
 
+        {/* Sleek Live Cyclone Pinpoint */}
         {hasCoords ? (
           <CircleMarker
             center={[cyclone.lat, cyclone.lon]}
-            radius={10}
-            pathOptions={{ color: "#ffffff", fillColor: "#c74a34", fillOpacity: 0.9, weight: 2 }}
+            radius={8}
+            pathOptions={{ color: "#FFFFFF", fillColor: "#EF4444", fillOpacity: 1, weight: 2 }}
           >
             <Popup>
-              <div className="font-display text-[11px] uppercase tracking-[0.14em]">{cyclone.name}</div>
-              <div className="mt-1 text-[12px]">
-                {cyclone.windKph > 0 ? `${cyclone.windKph} km/h` : "Wind unavailable"} · {cyclone.pressureHpa > 0 ? `${cyclone.pressureHpa} hPa` : "Pressure unavailable"}
+              <div className="font-display text-[11px] font-bold uppercase tracking-wider text-red-600">{cyclone.name}</div>
+              <div className="mt-0.5 font-mono text-[12px] font-medium">
+                {cyclone.windKph > 0 ? `${cyclone.windKph} km/h` : "Wind unavailable"} · {cyclone.pressureHpa > 0 ? `${cyclone.pressureHpa} hPa` : ""}
               </div>
-              <div className="text-[12px] opacity-70">{cyclone.category}</div>
+              <div className="text-[11px] text-muted-foreground">{cyclone.category}</div>
             </Popup>
           </CircleMarker>
         ) : null}

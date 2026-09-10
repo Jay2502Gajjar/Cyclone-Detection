@@ -1,0 +1,57 @@
+{
+  "dataset_name": "IBTrACS_NorthIndianOcean_Intensity",
+  "generated_at": "2026-09-09T22:52:23.967959",
+  "total_raw_observations": 62848,
+  "total_unique_cyclones": 1858,
+  "usable_observations_with_wind": 7930,
+  "forecast_horizon_hours": 24.0,
+  "horizon_tolerance_hours": 3.0,
+  "feature_count": 14,
+  "feature_names": [
+    "latitude",
+    "longitude",
+    "current_wind_kts",
+    "current_pressure_hpa",
+    "pressure_available",
+    "translation_speed_kmh",
+    "translation_heading_deg",
+    "coriolis_param",
+    "lag_6h_wind_change_kts",
+    "lag_6h_available",
+    "lag_6h_lat_change",
+    "lag_6h_lon_change",
+    "lag_12h_wind_change_kts",
+    "season_month"
+  ],
+  "split_seasons": {
+    "train": "<= 2013",
+    "validation": "2014 - 2018",
+    "test": ">= 2019"
+  },
+  "sample_counts": {
+    "total": 5916,
+    "train": 3539,
+    "validation": 949,
+    "test": 1428
+  },
+  "cyclone_counts": {
+    "total": 401,
+    "train": 274,
+    "validation": 50,
+    "test": 77
+  },
+  "target_distribution": {
+    "min_kts": 3.02,
+    "max_kts": 140.01,
+    "mean_kts": 45.44916159567275,
+    "median_kts": 34.99,
+    "std_kts": 23.82750039324549
+  },
+  "missingness_handling": {
+    "pressure_hpa": "Imputed with standard neutral 1010.0 hPa; accompanied by explicit binary flag pressure_available",
+    "lag_6h": "Imputed with 0.0; accompanied by explicit binary flag lag_6h_available",
+    "lag_12h": "Imputed with 0.0",
+    "movement": "Imputed with 0.0 when prior track step does not exist (initial observation)",
+    "environmental_data": "None fabricated; strictly observational and dynamic track derivation"
+  }
+}

@@ -1,35 +1,51 @@
 package com.cyclovision.controller;
 
+import com.cyclovision.repository.CycloneRepository;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping({"/api/v1/cyclones", "/api/cyclones"})
+@RequiredArgsConstructor
 public class ReportController {
+
+    private final CycloneRepository cycloneRepository;
 
     @GetMapping("/{id}/report")
     public ResponseEntity<SituationReportDto> getSituationReport(@PathVariable String id) {
+        String name = "Cyclone";
+        try {
+            UUID uuid = UUID.fromString(id);
+            var opt = cycloneRepository.findById(uuid);
+            if (opt.isPresent() && opt.get().getName() != null) {
+                name = opt.get().getName();
+            }
+        } catch (Exception ignored) {
+        }
+
         SituationReportDto report = SituationReportDto.builder()
                 .cycloneId(id)
-                .cycloneName("Cyclone Biparjoy")
+                .cycloneName(name)
                 .generatedAt(LocalDateTime.now().toString())
-                .executiveSummary("Cyclone Biparjoy has intensified into a Very Severe Cyclonic Storm over the Arabian Sea, moving North-Northwestward at 14 km/h with central pressure hovering near 954 hPa.")
+                .executiveSummary(name + " monitoring status active. Real-time meteorological telemetry and multi-modal analysis in progress.")
                 .keyThreats(List.of(
-                        "Destructive sustained wind speeds up to 165 km/h near storm center",
-                        "Storm surge of 2-3 meters above astronomical tide inundating low-lying coastal areas of Kutch",
-                        "Heavy to extremely heavy rainfall (150-250mm) across coastal Gujarat"
+                        "Sustained strong winds and heavy squall conditions across maritime pathways",
+                        "Elevated sea wave action and coastal surge risk",
+                        "Localized heavy precipitation along projected path"
                 ))
                 .recommendedActions(List.of(
-                        "Issue evacuation notices for settlements within 5km of coastline in high-risk zones",
-                        "Suspend maritime activities and recall fishing vessels to safe harbor immediately",
-                        "Pre-position National Disaster Response Force (NDRF) teams in Mandvi, Bhuj, and Dwarka"
+                        "Monitor coastal advisories and alert bulletins continuously",
+                        "Ensure maritime advisories and shipping lanes are alerted",
+                        "Maintain operational readiness for disaster response units"
                 ))
-                .meteorologicalSynthesis("Multi-modal ResNet analysis indicates a fully closed eye feature with symmetric convective clouds. XGBoost + Kalman trajectory models project a curving trajectory towards the Kutch/Saurashtra coast by Day 2.")
+                .meteorologicalSynthesis("Multi-modal satellite and observation synthesis active. Trajectory ensemble models project continuation along monitored storm path.")
                 .build();
 
         return ResponseEntity.ok(report);
